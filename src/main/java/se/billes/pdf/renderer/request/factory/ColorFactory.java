@@ -2,7 +2,7 @@ package se.billes.pdf.renderer.request.factory;
 
 import se.billes.pdf.renderer.exception.CreateColorException;
 import se.billes.pdf.renderer.model.Color;
-import se.billes.pdf.renderer.request.PdfRequest;
+import se.billes.pdf.renderer.request.PdfDocument;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.pdf.CMYKColor;
@@ -59,7 +59,7 @@ public class ColorFactory {
 		return new SpotColor(new PdfSpotColor(color.getRef(), baseColor),colors[4]);	
 	}
 	
-	public BaseColor getBaseColorByRef( PdfRequest request, String ref ){
+	public BaseColor getBaseColorByRef( PdfDocument request, String ref ){
 		if( ref == null ){
 			return null;
 		}

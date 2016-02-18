@@ -6,6 +6,7 @@ import se.billes.pdf.registry.Config;
 import se.billes.pdf.renderer.exception.CreateFontException;
 import se.billes.pdf.renderer.exception.PdfRequestNotValidException;
 import se.billes.pdf.renderer.model.Font;
+import se.billes.pdf.renderer.request.PdfDocument;
 import se.billes.pdf.renderer.request.PdfRequest;
 import se.billes.pdf.renderer.request.factory.FontFactory;
 
@@ -43,8 +44,9 @@ public class FontValidator implements IPdfRequestValidatable{
 	@Override
 	public void validate(PdfRequest request) throws PdfRequestNotValidException {
 		
-		if( request.getFonts() != null && request.getFonts().length > 0 ){
-			for( Font font : request.getFonts() ){
+		PdfDocument document = request.getDocument();
+		if( document.getFonts() != null && document.getFonts().length > 0 ){
+			for( Font font : document.getFonts() ){
 				try {
 					File file = new File( config.getRun().getMountPath(),font.getPath() );
 					if( ! file.exists() ){

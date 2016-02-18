@@ -41,8 +41,8 @@ public class PathValidator implements IPdfRequestValidatable {
 	public void validate(PdfRequest request) throws PdfRequestNotValidException {
 	
 		
-		if( request.getPath() == null ){
-			throw new PdfRequestNotValidException( "Path can not be null" );
+		if( request.getPath() == null || request.getPath().length() == 0 ){
+			throw new PdfRequestNotValidException( "Path can not be null or empty" );
 		}
 		File file = new File(config.getRun().getMountPath(),request.getPath());
 		

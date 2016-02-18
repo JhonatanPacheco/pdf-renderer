@@ -1,7 +1,7 @@
 package se.billes.pdf.renderer.model;
 
 import se.billes.pdf.renderer.exception.PdfRenderException;
-import se.billes.pdf.renderer.request.PdfRequest;
+import se.billes.pdf.renderer.request.PdfDocument;
 import se.billes.pdf.renderer.request.factory.BlockFactory;
 import se.billes.pdf.renderer.request.factory.SizeFactory;
 
@@ -110,7 +110,7 @@ public class Barcode extends BaseElement{
 			barcode.setBaseline( -1f );
 		}
 		
-		PdfRequest request = getPage().getPdfRequest();
+		PdfDocument request = getPage().getPdfDocument();
 		float pageHeight = request.getSize()[1];
 		float pageHeightInPs = SizeFactory.millimetersToPostscriptPoints(pageHeight);
 		

@@ -3,6 +3,9 @@ package se.billes.pdf.schedule;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
+import se.billes.pdf.registry.RegistryAction;
+import se.billes.pdf.registry.Config;
+import se.billes.pdf.registry.RegistryCall;
 import se.billes.pdf.renderer.exception.BMSSocketException;
 import se.billes.pdf.renderer.socket.BMSSocketRequest;
 
@@ -42,11 +45,21 @@ import com.google.inject.Inject;
 public class BMSSocketScheduler implements org.quartz.Job{
 	
 	@Inject BMSSocketRequest bmsSocketRequest;
+	@Inject Config config;
 	
 	@Override
 	public void execute(JobExecutionContext content) throws JobExecutionException {		
+		
+		RegistryCall call = new RegistryCall();
+		RegistryAction action = new RegistryAction();
+		action.setEndpoint(config.getRegistry().getEndpoint());
+		action.setPreCall(config.getRegistry().getPreCall());
+		action.setPriorities(config.getRegistry().getPriorities());
+		action.setPlugin(config.getRegistry().getPlugin());
+		call.setAction(action);
+		
 		try {
-			bmsSocketRequest.onJsonRequest(null);
+			bmsSocketRequest.onJsonRequest(call);
 		} catch (BMSSocketException e) {
 			e.printStackTrace();
 		}

@@ -2,7 +2,7 @@ package se.billes.pdf.renderer.request.factory;
 
 import se.billes.pdf.renderer.model.BaseElement;
 import se.billes.pdf.renderer.model.Block;
-import se.billes.pdf.renderer.request.PdfRequest;
+import se.billes.pdf.renderer.request.PdfDocument;
 
 import com.itextpdf.text.Element;
 import com.itextpdf.text.pdf.ColumnText;
@@ -36,12 +36,12 @@ import com.itextpdf.text.pdf.PdfTemplate;
  */
 public class BlockFactory {
 	
-	private PdfRequest getRequest(BaseElement block){
-		return block.getPage().getPdfRequest();
+	private PdfDocument getPdfDocument(BaseElement block){
+		return block.getPage().getPdfDocument();
 	}
 	
 	public float[] getBoundsInMMIncludeCutmark( BaseElement block ){
-		PdfRequest request =  getRequest(block);
+		PdfDocument request =  getPdfDocument(block);
 		float[] position = block.getPosition();
 		float leftInMM = position[0];
 		float topInMM = position[1];
@@ -72,7 +72,7 @@ public class BlockFactory {
 	}
 	
 	public void createRoundRectangle(PdfContentByte cb, Block block ){
-		PdfRequest request =  getRequest(block);
+		PdfDocument request =  getPdfDocument(block);
 		float[] positions = getBoundsInPs(block);
 		float[] mmPositions = getBoundsInMMIncludeCutmark(block);
 		PdfTemplate tp = cb.createTemplate(positions[2],positions[3]);
@@ -100,7 +100,7 @@ public class BlockFactory {
 	public ColumnText createColumn(PdfContentByte cb, Block block){
 		
 		ColumnText ct = new ColumnText( cb );
-		PdfRequest request =  getRequest(block);
+		PdfDocument request =  getPdfDocument(block);
 		float[] mmPositions = getBoundsInMMIncludeCutmark(block);
 		ct.setSimpleColumn( 
 				SizeFactory.millimetersToPostscriptPoints( mmPositions[0] ), 

@@ -6,6 +6,7 @@ import se.billes.pdf.renderer.model.alignment.HorizontalAlign;
 import se.billes.pdf.renderer.model.text.AbstractParagraph;
 import se.billes.pdf.renderer.model.text.Paragraph;
 import se.billes.pdf.renderer.model.text.TableParagraph;
+import se.billes.pdf.renderer.request.PdfDocument;
 import se.billes.pdf.renderer.request.PdfRequest;
 import se.billes.pdf.renderer.request.factory.ColorFactory;
 import se.billes.pdf.renderer.request.factory.FontFactory;
@@ -56,7 +57,7 @@ public class ParagraphValidator {
 	}
 	
 	public void validateParagraph(PdfRequest request, Paragraph paragraph,DocumentErrorFactory errorFactory ) throws PdfRequestNotValidException{
-
+		PdfDocument document = request.getDocument();
 		if( paragraph.getLeading() <= 0 ){
 			throw new PdfRequestNotValidException( errorFactory.appendErrorString("Font leading is 0 or less") );
 		}
@@ -64,7 +65,7 @@ public class ParagraphValidator {
 		if( paragraph.getColorRef() == null ){
 			paragraph.setBaseColor( new ColorFactory().getBlack() );
 		}else{
-			BaseColor color = new ColorFactory().getBaseColorByRef(request, paragraph.getColorRef() );
+			BaseColor color = new ColorFactory().getBaseColorByRef(document, paragraph.getColorRef() );
 			if( color == null ){
 				throw new PdfRequestNotValidException( errorFactory.appendErrorString("Could not find color ref for paragraph"));
 			}
@@ -72,7 +73,7 @@ public class ParagraphValidator {
 		}
 		
 		if( paragraph.getFontRef() != null ){
-			BaseFont font = new FontFactory().getBaseFontByRef(request,paragraph.getFontRef() );
+			BaseFont font = new FontFactory().getBaseFontByRef(document,paragraph.getFontRef() );
 			if( font == null ){
 				throw new PdfRequestNotValidException(errorFactory.appendErrorString("Could not find font ref for paragraph"));
 			}
@@ -132,17 +133,6 @@ public class ParagraphValidator {
 					
 					int cellCount = 0;
 					for( AbstractParagraph cell : paragraph.getCells()){
-						/**
-						if( cell.getFontRef() == null ){
-							cell.setFontRef(paragraph.getFontRef());
-						}
-						if( cell.getColorRef() == null ){
-							cell.setColorRef( paragraph.getColorRef() );
-						}
-						if( cell.getFontSize() == 0){
-							cell.setFontSize( paragraph.getFontSize());
-						}
-						**/
 						if( cell instanceof Paragraph ){
 							cell.setBlock(block);
 							errorFactory.withCellIndex(cellCount);
@@ -159,11 +149,7 @@ public class ParagraphValidator {
 						}
 						
 					}
-					
-					
 				}
-				
-				
 			}
 		}
 	}

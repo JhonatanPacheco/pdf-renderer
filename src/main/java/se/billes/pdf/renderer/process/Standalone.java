@@ -7,6 +7,7 @@ import se.billes.pdf.json.BlockTypeSelector;
 import se.billes.pdf.registry.Config;
 import se.billes.pdf.renderer.exception.PdfRenderException;
 import se.billes.pdf.renderer.request.PdfRequest;
+import se.billes.pdf.renderer.response.PdfResponse;
 import se.billes.pdf.renderer.validator.PdfRequestValidator;
 
 import com.google.gson.Gson;
@@ -46,15 +47,20 @@ public class Standalone {
 	public void run() throws PdfRenderException{
 		
 		try{
+			System.err.println( new Date().getTime() + ": before parse json");
 			Gson gson = blockTypeSelector.createGson();
 			JsonReader reader = new JsonReader(new FileReader(config.getRun().getPathToJsonDocument()));
+			System.err.println( new Date().getTime() + ": after read json file");
 			final PdfRequest request = gson.fromJson(reader,PdfRequest.class);
+			System.err.println( new Date().getTime() + ": after parse json");
 			request.setStartExecutionTime(new Date().getTime());
+			System.err.println( new Date().getTime() + ": before validate all");
 			pdfRequestValidator.validateAll(request);
+			System.err.println( new Date().getTime() + ": after validate");
 			new Renderer(request) {
 				@Override
-				public void onRendered(FileRendered fileRendered) {
-					System.out.println(fileRendered);
+				public void onRendered( PdfResponse response ) {
+					System.out.println(new Gson().toJson(response));
 				}
 			}.onRender();
 		}catch( Exception e ){

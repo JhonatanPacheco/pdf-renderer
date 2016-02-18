@@ -1,7 +1,5 @@
 package se.billes.pdf.renderer.response;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This program is built on top of iText.
@@ -28,28 +26,20 @@ import java.util.List;
  * applications. These activities include: offering paid services to customers as an ASP, 
  * serving PDFs on the fly in a web application, shipping iText with a closed source product.
  */
-public class Response {
-	private String message;
-	private boolean success;
-	private List<Param> params = new ArrayList<Param>();
+public class PdfResponse extends AbstractResponse{
 	
-	public String getMessage() {
-		return message;
+	private String type = "response";
+	private PdfAction action;
+	
+	
+	public String getType() {
+		return type;
 	}
-	public void setMessage(String message) {
-		this.message = message;
+	public PdfAction getAction() {
+		return action;
 	}
-	public boolean isSuccess() {
-		return success;
-	}
-	public void setSuccess(boolean success) {
-		this.success = success;
-	}
-	public List<Param> getParams() {
-		return params;
-	}
-	public void setParams(List<Param> params) {
-		this.params = params;
+	public void setAction(PdfAction action) {
+		this.action = action;
 	}
 	
 	

@@ -3,6 +3,7 @@ package se.billes.pdf.renderer.validator;
 import java.util.ArrayList;
 import java.util.List;
 
+import se.billes.pdf.registry.Config;
 import se.billes.pdf.renderer.exception.PdfRequestNotValidException;
 import se.billes.pdf.renderer.model.Barcode;
 import se.billes.pdf.renderer.model.BaseElement;
@@ -11,7 +12,10 @@ import se.billes.pdf.renderer.model.Image;
 import se.billes.pdf.renderer.model.Line;
 import se.billes.pdf.renderer.model.Page;
 import se.billes.pdf.renderer.model.QRCode;
+import se.billes.pdf.renderer.request.PdfDocument;
 import se.billes.pdf.renderer.request.PdfRequest;
+
+import com.google.inject.Inject;
 
 /**
  * This program is built on top of iText.
@@ -40,6 +44,8 @@ import se.billes.pdf.renderer.request.PdfRequest;
  */
 public class BaseElementValidator implements IPdfRequestValidatable {
 	List<String> types = new ArrayList<String>();
+	@Inject Config config;
+	
 	List<String> absolutePositionedBlocks = new ArrayList<String>();
 	public BaseElementValidator() {
 		types.add( "IMAGE" );
@@ -57,8 +63,9 @@ public class BaseElementValidator implements IPdfRequestValidatable {
 	
 	@Override
 	public void validate(PdfRequest request) throws PdfRequestNotValidException {
+		PdfDocument document = request.getDocument();
 		int pageCount = 0;
-		for( Page page : request.getPages() ){
+		for( Page page : document.getPages() ){
 			int blockCount = 0;
 			if( page.getBlocks() != null ){
 				for( BaseElement element : page.getBlocks() ){
@@ -93,7 +100,7 @@ public class BaseElementValidator implements IPdfRequestValidatable {
 					}	
 					if( element instanceof Image ){
 						Image image = (Image) element;
-						new ImageValidator()
+						new ImageValidator(config)
 						.withPageIndex(pageCount)
 						.withBlockIndex(blockCount)
 						.validate(request, image);

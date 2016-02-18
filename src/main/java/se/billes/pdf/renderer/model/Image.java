@@ -132,8 +132,8 @@ public class Image extends BaseBlock {
 		}
 
 		
-		float pageHeight = getPage().getPdfRequest().getSize()[1];
-		float pageWidth = getPage().getPdfRequest().getSize()[0];
+		float pageHeight = getPage().getPdfDocument().getSize()[1];
+		float pageWidth = getPage().getPdfDocument().getSize()[0];
 		
 		float x = 0;
 		float y = 0;
@@ -214,7 +214,7 @@ public class Image extends BaseBlock {
 			
 			float left = getPosition()[0];
 			float top = getPosition()[1];
-			if( getPage().getPdfRequest().getCutmarks() != null ){
+			if( getPage().getPdfDocument().getCutmarks() != null ){
 				left += SizeFactory.CUT_MARK;
 				top -= SizeFactory.CUT_MARK;
 			}

@@ -68,9 +68,11 @@ public abstract class JsonParseConnection implements Runnable{
 			String jsonRequest = inputStreamAsString(is);
 
 			try{
+				System.err.println( "Before json." + new Date().getTime() );
 				Gson gson = new BlockTypeSelector().createGson();
 				PdfRequest request = gson.fromJson(jsonRequest, PdfRequest.class);
 				request.setStartExecutionTime(startTime);
+				System.out.println( "After json. "  + new Date().getTime());
 				onRequestProcessed( request );
 				
 			}catch( Exception e ){

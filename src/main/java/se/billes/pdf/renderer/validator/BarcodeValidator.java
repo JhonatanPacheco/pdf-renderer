@@ -3,12 +3,14 @@ package se.billes.pdf.renderer.validator;
 import se.billes.pdf.renderer.exception.PdfRequestNotValidException;
 import se.billes.pdf.renderer.model.Barcode;
 import se.billes.pdf.renderer.model.Barcode.BarCodeType;
+import se.billes.pdf.renderer.request.PdfDocument;
 import se.billes.pdf.renderer.request.PdfRequest;
 import se.billes.pdf.renderer.request.factory.ColorFactory;
 import se.billes.pdf.renderer.request.factory.FontFactory;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.pdf.BaseFont;
+
 
 /**
  * This program is built on top of iText.
@@ -52,6 +54,8 @@ public class BarcodeValidator {
 	
 	public void validate(PdfRequest request, Barcode barcode) throws PdfRequestNotValidException {
 		
+		PdfDocument document = request.getDocument();
+		
 		DocumentErrorFactory errorFactory = new DocumentErrorFactory().withPageIndex(pageIndex).withBlockIndex(blockIndex);
 		
 		if( barcode.getCode() == null ){
@@ -61,7 +65,7 @@ public class BarcodeValidator {
 		if( barcode.getBarColorRef() == null ){
 			barcode.setBarBaseColor( new ColorFactory().getBlack() );
 		}else{
-			BaseColor color = new ColorFactory().getBaseColorByRef(request, barcode.getBarColorRef() );
+			BaseColor color = new ColorFactory().getBaseColorByRef(document, barcode.getBarColorRef() );
 			if( color == null ){
 				throw new PdfRequestNotValidException( "Could not find color ref for barColorRef" );
 			}
@@ -71,7 +75,7 @@ public class BarcodeValidator {
 		if( barcode.getCodeColorRef() == null ){
 			barcode.setCodeBaseColor( new ColorFactory().getBlack() );
 		}else{
-			BaseColor color = new ColorFactory().getBaseColorByRef(request, barcode.getCodeColorRef() );
+			BaseColor color = new ColorFactory().getBaseColorByRef(document, barcode.getCodeColorRef() );
 			if( color == null ){
 				throw new PdfRequestNotValidException( "Could not find color ref for codeColorRef" );
 			}
@@ -100,7 +104,7 @@ public class BarcodeValidator {
 		}
 		
 		if( barcode.getFontRef() != null ){
-			BaseFont font = new FontFactory().getBaseFontByRef(request, barcode.getFontRef());
+			BaseFont font = new FontFactory().getBaseFontByRef(document, barcode.getFontRef());
 			if( font == null ){
 				throw new PdfRequestNotValidException( "Could not find font the font ref" );
 			}

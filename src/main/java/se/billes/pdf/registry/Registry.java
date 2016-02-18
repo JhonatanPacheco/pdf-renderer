@@ -26,16 +26,18 @@ package se.billes.pdf.registry;
  * serving PDFs on the fly in a web application, shipping iText with a closed source product.
  */
 public class Registry {
-	private String register;
+	
+	private String type;
 	private int[] priorities;
 	private String[] preCall;
 	private Endpoint endpoint;
+	private String plugin;
 	
-	public String getRegister() {
-		return register;
+	public String getType() {
+		return type;
 	}
-	public void setRegister(String register) {
-		this.register = register;
+	public void setType(String type) {
+		this.type = type;
 	}
 	public int[] getPriorities() {
 		return priorities;
@@ -55,6 +57,12 @@ public class Registry {
 	}
 	public void setEndpoint(Endpoint endpoint) {
 		this.endpoint = endpoint;
+	}
+	public String getPlugin() {
+		return plugin;
+	}
+	public void setPlugin(String plugin) {
+		this.plugin = plugin;
 	}
 	
 	

@@ -4,6 +4,7 @@ import com.itextpdf.text.BaseColor;
 
 import se.billes.pdf.renderer.exception.PdfRequestNotValidException;
 import se.billes.pdf.renderer.model.Line;
+import se.billes.pdf.renderer.request.PdfDocument;
 import se.billes.pdf.renderer.request.PdfRequest;
 import se.billes.pdf.renderer.request.factory.ColorFactory;
 
@@ -49,6 +50,7 @@ public class LineValidator {
 	
 	public void validate(PdfRequest request, Line line) throws PdfRequestNotValidException {
 		
+		PdfDocument document = request.getDocument();
 		DocumentErrorFactory errorFactory = new DocumentErrorFactory().withPageIndex(pageIndex).withBlockIndex(blockIndex);
 		
 		
@@ -68,7 +70,7 @@ public class LineValidator {
 			throw new PdfRequestNotValidException( errorFactory.appendErrorString("Line must have moveTo:[x1,y1]" ));
 		}
 		if( line.getColorRef() != null ){
-			BaseColor color = new ColorFactory().getBaseColorByRef(request, line.getColorRef());
+			BaseColor color = new ColorFactory().getBaseColorByRef(document, line.getColorRef());
 			if( color == null ){
 				throw new PdfRequestNotValidException( errorFactory.appendErrorString("Could not find colorRef color for line"));
 			}

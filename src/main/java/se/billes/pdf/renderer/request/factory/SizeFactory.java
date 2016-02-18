@@ -1,8 +1,8 @@
 package se.billes.pdf.renderer.request.factory;
 
-import com.itextpdf.text.Rectangle;
+import se.billes.pdf.renderer.request.PdfDocument;
 
-import se.billes.pdf.renderer.request.PdfRequest;
+import com.itextpdf.text.Rectangle;
 
 /**
  * This program is built on top of iText.
@@ -48,7 +48,7 @@ public class SizeFactory {
 	 * @param request
 	 * @return the trim box in post script points as array of four elements
 	 */
-	public float[] getTrimBoxInPS(PdfRequest request){
+	public float[] getTrimBoxInPS(PdfDocument request){
 		
 		if( request.getCutmarks() != null ){
 			return getTrimBoxInPSWithCutmarks(request);
@@ -63,7 +63,7 @@ public class SizeFactory {
 		return returnValue;
 	}
 	
-	private float[] getTrimBoxInPSWithCutmarks(PdfRequest request){
+	private float[] getTrimBoxInPSWithCutmarks(PdfDocument request){
 		float[] returnValue = {
 					millimetersToPostscriptPoints(CUT_MARK),
 					millimetersToPostscriptPoints(CUT_MARK),
@@ -78,7 +78,7 @@ public class SizeFactory {
 	 * @param request
 	 * @return {@link Rectangle} with cutmark if that is used transformed to postscript points
 	 */
-	public Rectangle getSizeAsRectangle(PdfRequest request){
+	public Rectangle getSizeAsRectangle(PdfDocument request){
 		float bothSidesOfCutmark = 0;
 		if( request.getCutmarks() != null ){
 			bothSidesOfCutmark = CUT_MARK * 2;
@@ -88,7 +88,7 @@ public class SizeFactory {
 	
 
 	
-	public Rectangle getTrimBoxAsRectangle(PdfRequest request){
+	public Rectangle getTrimBoxAsRectangle(PdfDocument request){
 		float[] trimBox = getTrimBoxInPS(request);
 		return new Rectangle( trimBox[0],trimBox[1],trimBox[2],trimBox[3] );
 	}

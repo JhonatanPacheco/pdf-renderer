@@ -76,7 +76,7 @@ public class Line extends BaseElement {
 	@Override
 	public void onRender(PdfContentByte cb) throws PdfRenderException {
 		
-		Integer[] pageSizes = getPage().getPdfRequest().getSize();
+		Integer[] pageSizes = getPage().getPdfDocument().getSize();
 		float[] pos = getPosition();
 		float[] moveTo = getMoveTo();
 		cb.setLineWidth( getThickness() );

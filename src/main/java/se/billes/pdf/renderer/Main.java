@@ -1,25 +1,28 @@
 package se.billes.pdf.renderer;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import se.billes.pdf.json.ConfigNotValidException;
 import se.billes.pdf.json.ConfigReader;
 import se.billes.pdf.module.ConfigModule;
 import se.billes.pdf.registry.Config;
+import se.billes.pdf.registry.Endpoint;
+import se.billes.pdf.renderer.exception.BMSSocketException;
 import se.billes.pdf.renderer.exception.PdfRenderException;
 import se.billes.pdf.renderer.exception.PdfRequestNotValidException;
 import se.billes.pdf.renderer.exception.PluginSocketException;
-import se.billes.pdf.renderer.process.FileRendered;
 import se.billes.pdf.renderer.process.Renderer;
 import se.billes.pdf.renderer.process.Standalone;
 import se.billes.pdf.renderer.request.PdfRequest;
-import se.billes.pdf.renderer.response.Response;
+import se.billes.pdf.renderer.response.PdfResponse;
 import se.billes.pdf.renderer.socket.BMSSocketRequest;
 import se.billes.pdf.renderer.socket.PluginServerSocket;
 import se.billes.pdf.renderer.validator.PdfRequestValidator;
 import se.billes.pdf.schedule.BMSSocketScheduler;
 
+import com.google.gson.Gson;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -58,6 +61,7 @@ public class Main {
 			System.exit(0);
 		}
 		Config config = null;
+		System.err.println( new Date().getTime() + ": before read config");
 		try {
 			config = new ConfigReader(args[0]).readConfig();
 		} catch (ConfigNotValidException e) {
@@ -65,6 +69,7 @@ public class Main {
 			System.exit(0);
 		}
 		
+		System.err.println( new Date().getTime() + ": after read config");
 		List<AbstractModule> modules = new ArrayList<AbstractModule>();
 		modules.add( new ConfigModule(config));
 		if( ! config.getRun().isStandAlone() ){
@@ -75,9 +80,12 @@ public class Main {
 				}
 			});
 		}
+		System.err.println( new Date().getTime() + ": before creating injector");
 		final Injector injector = Guice.createInjector(modules);
+		System.err.println( new Date().getTime() + ": after creating injector");
 		if( config.getRun().isStandAlone() ){
 			try {
+				System.err.println( new Date().getTime() + ": before running standalone");
 				injector.getInstance(Standalone.class).run();
 			} catch (PdfRenderException e) {
 				e.printStackTrace();
@@ -86,29 +94,36 @@ public class Main {
 			PluginServerSocket server = new PluginServerSocket(){	
 				@Override
 				protected void onRequestProcessed( PdfRequest request ) throws PdfRequestNotValidException{
-					BMSSocketRequest socketRequest = injector.getInstance(BMSSocketRequest.class);
+					final BMSSocketRequest socketRequest = injector.getInstance(BMSSocketRequest.class);
 					
 					try{
 					    injector.getInstance(PdfRequestValidator.class).validateAll(request);
 						new Renderer(request) {
 							@Override
-							public void onRendered(FileRendered fileRendered) {
-								System.out.println(fileRendered);
+							public void onRendered(PdfResponse response) {
+								System.out.println(new Gson().toJson(response));
+								try {
+									socketRequest.onJsonRequest(response);
+								} catch (BMSSocketException e) {
+									e.printStackTrace();
+								}
 								
 							}
 							
 						}.onRender();
 					}catch( PdfRequestNotValidException e ){
-						Response response = request.getResponse();
+						e.printStackTrace();
 						
 					}catch (PdfRenderException e) {
 						e.printStackTrace();
 						
-					} 
+					}
 				}
 			};
 
 			try {
+				Endpoint endpoint = config.getRegistry().getEndpoint();
+				server.setPort( endpoint.getPort());
 				server.onStart();
 			} catch (PluginSocketException e) {
 				e.printStackTrace();

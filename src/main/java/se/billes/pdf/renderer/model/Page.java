@@ -4,7 +4,7 @@ import se.billes.pdf.renderer.exception.PdfRenderException;
 import se.billes.pdf.renderer.process.CutmarksRenderer;
 import se.billes.pdf.renderer.process.NewPageRenderer;
 import se.billes.pdf.renderer.process.TemplatePageRenderer;
-import se.billes.pdf.renderer.request.PdfRequest;
+import se.billes.pdf.renderer.request.PdfDocument;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.pdf.HyphenationAuto;
@@ -40,7 +40,7 @@ public class Page extends PdfPageEventHelper{
 	
 	private BaseElement[] blocks;
 	private Template template;
-	private PdfRequest pdfRequest;
+	private PdfDocument pdfDocument;
 	
 	public void onNewPage(PdfWriter writer, Document document ) throws PdfRenderException{
 		if( template == null ){
@@ -52,11 +52,11 @@ public class Page extends PdfPageEventHelper{
 	
 	@Override
 	public void onEndPage(PdfWriter writer, Document document) {
-		new CutmarksRenderer(pdfRequest).render(writer, document);
+		new CutmarksRenderer(pdfDocument).render(writer, document);
 	}
 	
 	public HyphenationAuto getHyphenationAuto(){
-		return pdfRequest.getHyphenationAuto();
+		return pdfDocument.getHyphenationAuto();
 	}
 	
 	public BaseElement[] getBlocks() {
@@ -75,11 +75,13 @@ public class Page extends PdfPageEventHelper{
 		this.template = template;
 	}
 
-	public PdfRequest getPdfRequest() {
-		return pdfRequest;
+	public PdfDocument getPdfDocument() {
+		return pdfDocument;
 	}
 
-	public void setPdfRequest(PdfRequest pdfRequest) {
-		this.pdfRequest = pdfRequest;
+	public void setPdfDocument(PdfDocument pdfDocument) {
+		this.pdfDocument = pdfDocument;
 	}
+
+
 }

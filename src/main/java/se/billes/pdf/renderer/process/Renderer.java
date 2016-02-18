@@ -7,8 +7,11 @@ import java.util.Date;
 
 import se.billes.pdf.renderer.exception.PdfRenderException;
 import se.billes.pdf.renderer.model.Page;
+import se.billes.pdf.renderer.request.PdfDocument;
 import se.billes.pdf.renderer.request.PdfRequest;
 import se.billes.pdf.renderer.request.factory.SizeFactory;
+import se.billes.pdf.renderer.response.PdfAction;
+import se.billes.pdf.renderer.response.PdfResponse;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -48,18 +51,20 @@ public abstract class Renderer{
 	}
 	
 	public void onRender() throws PdfRenderException{
+		System.err.println( "Renderer called" + new Date().getTime());
 		long startTime = new Date().getTime();
-		File destinationPdf = new File(pdfRequest.getPath(),pdfRequest.getName());
+		PdfDocument pdfDocument = pdfRequest.getDocument();
+		File destinationPdf = new File(pdfRequest.getPath(),pdfDocument.getName());
 		Document document = new Document();
 		boolean finishedRender = false;
 		try {
 			PdfWriter writer = PdfWriter.getInstance( document, new FileOutputStream( destinationPdf ));
 			document.addAuthor( "iText" );
-			writer.setBoxSize( "trim" , new SizeFactory().getTrimBoxAsRectangle(pdfRequest) );
-			document.setPageSize( new SizeFactory().getSizeAsRectangle(pdfRequest) );
+			writer.setBoxSize( "trim" , new SizeFactory().getTrimBoxAsRectangle(pdfDocument) );
+			document.setPageSize( new SizeFactory().getSizeAsRectangle(pdfDocument) );
 	
 			document.open();
-			for( Page page : pdfRequest.getPages() ){
+			for( Page page : pdfDocument.getPages() ){
 				page.onNewPage(writer,document);
 			}
 			
@@ -79,11 +84,14 @@ public abstract class Renderer{
 			}
 			if( finishedRender ){
 				long endTime = new Date().getTime();
-				onRendered( new FileRendered()
-							.withFile(destinationPdf)
-							.withtimeOfPdfRendering(endTime - startTime)
-							.withTotalTimeOfExecution(endTime - pdfRequest.getStartExecutionTime())
-						  );
+				PdfAction action = new PdfAction();
+				action.setFile( destinationPdf.getAbsolutePath() );
+				action.setExecutionOfPdfRendering(endTime - startTime);
+				action.setTotalTimeOfExecution(endTime - pdfRequest.getStartExecutionTime());
+				action.setSuccess(true);
+				PdfResponse response = new PdfResponse();
+				response.setAction(action);
+				onRendered( response );
 			}
 		}
 
@@ -93,6 +101,6 @@ public abstract class Renderer{
 	/**
 	 * Called when and if the renderer process is done
 	 */
-	public abstract void onRendered( FileRendered fileRendered );
+	public abstract void onRendered( PdfResponse pdfResponse );
 	
 }

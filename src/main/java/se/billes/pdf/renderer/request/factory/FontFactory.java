@@ -5,10 +5,11 @@ import java.io.IOException;
 
 import se.billes.pdf.renderer.exception.CreateFontException;
 import se.billes.pdf.renderer.model.Font;
-import se.billes.pdf.renderer.request.PdfRequest;
+import se.billes.pdf.renderer.request.PdfDocument;
 
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.BaseFont;
+
 
 /**
  * This program is built on top of iText.
@@ -68,7 +69,7 @@ public class FontFactory {
 		}
 	}
 	
-	public BaseFont getBaseFontByRef( PdfRequest request, String ref ){
+	public BaseFont getBaseFontByRef( PdfDocument request, String ref ){
 		if( ref == null ){
 			return null;
 		}

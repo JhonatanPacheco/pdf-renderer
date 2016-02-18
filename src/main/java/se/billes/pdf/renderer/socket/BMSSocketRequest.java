@@ -8,7 +8,7 @@ import java.net.UnknownHostException;
 
 import se.billes.pdf.registry.Config;
 import se.billes.pdf.renderer.exception.BMSSocketException;
-import se.billes.pdf.renderer.response.Response;
+import se.billes.pdf.renderer.response.AbstractResponse;
 
 import com.google.gson.Gson;
 import com.google.inject.Inject;
@@ -42,19 +42,15 @@ public class BMSSocketRequest {
 	
 	@Inject Config config;
 	
-	public void onJsonRequest( Response response )  throws BMSSocketException{
+	
+	public void onJsonRequest( AbstractResponse response )  throws BMSSocketException{
 		OutputStreamWriter out = null;
 		ObjectInputStream in = null;
 		Socket requestSocket = null;
 		try{
 			requestSocket = new Socket( config.getBms().getHost(), config.getBms().getPort());
 			out = new OutputStreamWriter(requestSocket.getOutputStream());
-			if( response == null ){
-				out.write(new Gson().toJson(config.getRegistry()));
-			}else{
-				out.write(new Gson().toJson(response));
-			}
-			
+			out.write(new Gson().toJson(response));
 			out.flush();
 		}
 		catch(UnknownHostException e){

@@ -3,7 +3,7 @@ package se.billes.pdf.renderer.model;
 import java.util.Hashtable;
 
 import se.billes.pdf.renderer.exception.PdfRenderException;
-import se.billes.pdf.renderer.request.PdfRequest;
+import se.billes.pdf.renderer.request.PdfDocument;
 import se.billes.pdf.renderer.request.factory.BlockFactory;
 import se.billes.pdf.renderer.request.factory.ColorFactory;
 import se.billes.pdf.renderer.request.factory.SizeFactory;
@@ -80,7 +80,7 @@ public class QRCode extends BaseElement{
 			@SuppressWarnings("rawtypes")
 			Hashtable hintMap = new Hashtable();
 			hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
-			PdfRequest req = getPage().getPdfRequest();
+			PdfDocument req = getPage().getPdfDocument();
 			QRCodeWriter qrCodeWriter = new QRCodeWriter();
 			BitMatrix byteMatrix = qrCodeWriter.encode(getText(), BarcodeFormat.QR_CODE, (int) (positions[2]),(int) (positions[3]), hintMap);
 			int matrixWidth = byteMatrix.getWidth();
@@ -88,7 +88,7 @@ public class QRCode extends BaseElement{
 			float pageHeight = req.getSize()[1];
 			float top = getPosition()[1];
 
-			if (getPage().getPdfRequest().getCutmarks() != null) {
+			if (getPage().getPdfDocument().getCutmarks() != null) {
 				pageHeight += SizeFactory.CUT_MARK * 2;
 				top += SizeFactory.CUT_MARK;
 			}

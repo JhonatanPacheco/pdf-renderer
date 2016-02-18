@@ -5,6 +5,7 @@ import java.io.File;
 import se.billes.pdf.registry.Config;
 import se.billes.pdf.renderer.exception.PdfRequestNotValidException;
 import se.billes.pdf.renderer.model.Page;
+import se.billes.pdf.renderer.request.PdfDocument;
 import se.billes.pdf.renderer.request.PdfRequest;
 
 import com.google.inject.Inject;
@@ -40,12 +41,12 @@ public class PageValidator implements IPdfRequestValidatable {
 	
 	@Override
 	public void validate(PdfRequest request) throws PdfRequestNotValidException {
-		
-		if( request.getPages() == null || request.getPages().length == 0 ){
+		PdfDocument document = request.getDocument();
+		if( document.getPages() == null || document.getPages().length == 0 ){
 			throw new PdfRequestNotValidException( "Document must contain pages" );
 		}
 		
-		for( Page page : request.getPages() ){
+		for( Page page : document.getPages() ){
 			if( page.getTemplate() != null ){
 				if( page.getTemplate().getTemplatePath() == null ){
 					throw new PdfRequestNotValidException( "path for template can not be null" );

@@ -1,7 +1,7 @@
 package se.billes.pdf.renderer.process;
 
 import se.billes.pdf.renderer.model.Cutmarks;
-import se.billes.pdf.renderer.request.PdfRequest;
+import se.billes.pdf.renderer.request.PdfDocument;
 import se.billes.pdf.renderer.request.factory.SizeFactory;
 
 import com.itextpdf.text.Document;
@@ -36,8 +36,8 @@ import com.itextpdf.text.pdf.PdfWriter;
  */
 public class CutmarksRenderer {
 	
-	private PdfRequest request;
-	public CutmarksRenderer(PdfRequest request){
+	private PdfDocument request;
+	public CutmarksRenderer(PdfDocument request){
 		this.request = request;
 	}
 	

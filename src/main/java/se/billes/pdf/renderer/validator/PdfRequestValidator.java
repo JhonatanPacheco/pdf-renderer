@@ -8,6 +8,7 @@ import com.google.inject.Inject;
 import se.billes.pdf.renderer.exception.PdfRequestNotValidException;
 import se.billes.pdf.renderer.model.BaseElement;
 import se.billes.pdf.renderer.model.Page;
+import se.billes.pdf.renderer.request.PdfDocument;
 import se.billes.pdf.renderer.request.PdfRequest;
 
 /**
@@ -46,8 +47,14 @@ public class PdfRequestValidator {
 	@Inject PathValidator pathValidator;
 	@Inject PageValidator pageValidator;
 	@Inject FontValidator fontValidator;
+	@Inject BaseElementValidator baseElementValidator;
 	
 	public void validateAll(PdfRequest request) throws PdfRequestNotValidException{
+		
+		if( request == null || request.getDocument() == null ){
+			throw new PdfRequestNotValidException( "Request or document can not be null" );
+		}
+		
 		validatables.add( pathValidator );
 		validatables.add( sizeValidator);
 		validatables.add( new NameValidator() );
@@ -55,14 +62,15 @@ public class PdfRequestValidator {
 		validatables.add( pageValidator );
 		validatables.add( new ColorValidator() );
 		validatables.add( fontValidator );
-		validatables.add( new BaseElementValidator() );
+		validatables.add( baseElementValidator );
 		
 		for( IPdfRequestValidatable validatable : validatables ){
 			validatable.validate(request);
 		}
 		
-		for( Page page : request.getPages() ){
-			page.setPdfRequest(request);
+		PdfDocument document = request.getDocument();
+		for( Page page : document.getPages() ){
+			page.setPdfDocument(document);
 			if( page.getBlocks() != null ){
 				for( BaseElement block : page.getBlocks() ){
 					block.setPage(page);

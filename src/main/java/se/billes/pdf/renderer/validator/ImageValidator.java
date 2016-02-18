@@ -2,6 +2,7 @@ package se.billes.pdf.renderer.validator;
 
 import java.io.File;
 
+import se.billes.pdf.registry.Config;
 import se.billes.pdf.renderer.exception.PdfRequestNotValidException;
 import se.billes.pdf.renderer.model.Image;
 import se.billes.pdf.renderer.request.PdfRequest;
@@ -35,6 +36,11 @@ public class ImageValidator {
 	
 	private Integer pageIndex;
 	private Integer blockIndex;
+	private Config config;
+	
+	public ImageValidator(Config config){
+		this.config = config;
+	}
 	
 	public ImageValidator withPageIndex( int index ){
 		this.pageIndex = index;
@@ -49,7 +55,7 @@ public class ImageValidator {
 	public void validate(PdfRequest request, Image image) throws PdfRequestNotValidException {
 		
 		DocumentErrorFactory errorFactory = new DocumentErrorFactory().withPageIndex(pageIndex).withBlockIndex(blockIndex);
-		
+
 		if( image.getPath() == null ){
 			throw new PdfRequestNotValidException( errorFactory.appendErrorString("Image must have a path"));
 		}else{
@@ -59,17 +65,12 @@ public class ImageValidator {
 			){
 				throw new PdfRequestNotValidException( errorFactory.appendErrorString("Image must be jpg or pdf" ));
 			}
-			File file = new File( image.getPath() );
+			File file = new File(config.getRun().getMountPath(), image.getPath() );
 			if( ! file.exists() ){
 				throw new PdfRequestNotValidException( errorFactory.appendErrorString("Could not find path: (" + image.getPath() + ") for image"));
 			}
 			
 			image.setFile(file);
 		}
-		
-		
-		
-		
 	}
-
 }

@@ -5,6 +5,7 @@ import com.itextpdf.text.BaseColor;
 import se.billes.pdf.renderer.exception.PdfRequestNotValidException;
 import se.billes.pdf.renderer.model.Block;
 import se.billes.pdf.renderer.model.alignment.VerticalAlign;
+import se.billes.pdf.renderer.request.PdfDocument;
 import se.billes.pdf.renderer.request.PdfRequest;
 import se.billes.pdf.renderer.request.factory.ColorFactory;
 
@@ -50,11 +51,11 @@ public class BlockValidator {
 	
 	public void validate(PdfRequest request,Block block) throws PdfRequestNotValidException {
 		
-	
+		PdfDocument document = request.getDocument();
 		DocumentErrorFactory errorFactory = new DocumentErrorFactory().withPageIndex(pageIndex).withBlockIndex(blockIndex);
 		
 		if( block.getBackgroundRef()  != null ){
-			BaseColor color = new ColorFactory().getBaseColorByRef(request, block.getBackgroundRef());
+			BaseColor color = new ColorFactory().getBaseColorByRef(document, block.getBackgroundRef());
 			if( color == null ){
 				throw new PdfRequestNotValidException( errorFactory.appendErrorString("Could not find backgroundRef color for block" ) );
 			}
@@ -66,7 +67,7 @@ public class BlockValidator {
 				if( block.getBorder().getColorRef() == null ){
 					block.getBorder().setBaseColor( new ColorFactory().getBlack());
 				}else{
-					BaseColor color = new ColorFactory().getBaseColorByRef(request, block.getBorder().getColorRef());
+					BaseColor color = new ColorFactory().getBaseColorByRef(document, block.getBorder().getColorRef());
 					if( color == null ){
 						throw new PdfRequestNotValidException( errorFactory.appendErrorString("Could not find colorRef for border" ) );
 					}

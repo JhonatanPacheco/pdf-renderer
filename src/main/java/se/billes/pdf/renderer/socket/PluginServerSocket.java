@@ -43,69 +43,54 @@ public class PluginServerSocket{
 	SocketChannel sc;
 	private volatile boolean run = true;
 	ServerSocketChannel ssc;
-	private int millisecondsToPerformCommand = 100;
-	private long lastCommandTime = System.currentTimeMillis();
-
 	
 	public void setPort( int port ){
 		this.port = port;
 	}
 
 	public void onStart() throws PluginSocketException{
+		try {			
+			ssc = ServerSocketChannel.open();
+		    ssc.socket().bind(new InetSocketAddress(port));
+		    ssc.configureBlocking(false);
+		  
+		    while (true) {  	
+		    	sc = ssc.accept();
+		    	
+		    	if( sc != null ){
+			    	try{
+						new JsonParseConnection( sc.socket()){
+							@Override
+							protected void onError(Throwable e) {	
+								e.printStackTrace();
+							}
 
-			try {			
-				ssc = ServerSocketChannel.open();
-			    ssc.socket().bind(new InetSocketAddress(port));
-			    ssc.configureBlocking(false);
-			  
-			    while (true) {
-			    	
-			    	sc = ssc.accept();
-			    	
-			    	if( sc != null ){
-				    	try{
-							new JsonParseConnection( sc.socket()){
-								@Override
-								protected void onError(Throwable e) {	
-									e.printStackTrace();
-								}
-
-								@Override
-								protected void onRequestProcessed(PdfRequest request) throws PdfRequestNotValidException{
-									PluginServerSocket.this.onRequestProcessed(request);
-								}
-							};
-						}catch( Exception e ){
-							e.printStackTrace();
-						}
-			    	}else{
-			    		try{
-			    			Thread.sleep(100);
-			    		}catch( InterruptedException e ){
-			    			e.printStackTrace();
-			    		}
-			    	}
-			    	
-			    	long current = System.currentTimeMillis();
-					if( lastCommandTime + millisecondsToPerformCommand < current ){
-						lastCommandTime = System.currentTimeMillis();
-						//onProcess();
+							@Override
+							protected void onRequestProcessed(PdfRequest request) throws PdfRequestNotValidException{
+								PluginServerSocket.this.onRequestProcessed(request);
+							}
+						};
+					}catch( Exception e ){
+						e.printStackTrace();
 					}
-			    	if( ! run ) break;
-			    	
-			     }
+		    	}else{
+		    		try{
+		    			Thread.sleep(100);
+		    		}catch( InterruptedException e ){
+		    			e.printStackTrace();
+		    		}
+		    	}
+
+		    	if( ! run ) break;
+		    	
+		     }
 
 
-			} catch (IOException e) {
-				onShutdown();
-			}
-			
-	
-		
+		} catch (IOException e) {
+			onShutdown();
+		}
 	}
 
-
-	
 	public void onShutdown() {
 		run = false;
 		try{
@@ -122,8 +107,6 @@ public class PluginServerSocket{
 
 			}
 		}
-		
-		
 	}
 
 	protected  void onRequestProcessed( PdfRequest request ) throws PdfRequestNotValidException{
