@@ -74,11 +74,13 @@ public class PluginServerSocket{
 						e.printStackTrace();
 					}
 		    	}else{
+		    		
 		    		try{
 		    			Thread.sleep(100);
 		    		}catch( InterruptedException e ){
 		    			e.printStackTrace();
 		    		}
+		    		
 		    	}
 
 		    	if( ! run ) break;

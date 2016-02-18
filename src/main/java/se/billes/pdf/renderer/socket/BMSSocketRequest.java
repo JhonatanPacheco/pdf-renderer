@@ -54,10 +54,10 @@ public class BMSSocketRequest {
 			out.flush();
 		}
 		catch(UnknownHostException e){
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		catch(IOException e){
-			e.printStackTrace(); 
+			//e.printStackTrace(); 
 		}
 		finally{
 			try{

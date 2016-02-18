@@ -51,8 +51,9 @@ public abstract class Renderer{
 	}
 	
 	public void onRender() throws PdfRenderException{
-		System.err.println( "Renderer called" + new Date().getTime());
+		
 		long startTime = new Date().getTime();
+		System.err.println( startTime + ": Renderer called");
 		PdfDocument pdfDocument = pdfRequest.getDocument();
 		File destinationPdf = new File(pdfRequest.getPath(),pdfDocument.getName());
 		Document document = new Document();
@@ -67,7 +68,7 @@ public abstract class Renderer{
 			for( Page page : pdfDocument.getPages() ){
 				page.onNewPage(writer,document);
 			}
-			
+			System.err.println( new Date().getTime() + ": Renderer finished");
 			finishedRender = true;
 			
 			
@@ -83,6 +84,7 @@ public abstract class Renderer{
 			}catch( Exception e ){	
 			}
 			if( finishedRender ){
+				System.err.println( new Date().getTime() + ": document closed");
 				long endTime = new Date().getTime();
 				PdfAction action = new PdfAction();
 				action.setFile( destinationPdf.getAbsolutePath() );

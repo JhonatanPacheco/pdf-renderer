@@ -94,16 +94,21 @@ public class Main {
 			PluginServerSocket server = new PluginServerSocket(){	
 				@Override
 				protected void onRequestProcessed( PdfRequest request ) throws PdfRequestNotValidException{
+					System.err.println( new Date().getTime() + ": before creating injector socket");
 					final BMSSocketRequest socketRequest = injector.getInstance(BMSSocketRequest.class);
-					
+					System.err.println( new Date().getTime() + ": after creating injector socket");
 					try{
+						System.err.println( new Date().getTime() + ": before validate all");
 					    injector.getInstance(PdfRequestValidator.class).validateAll(request);
+					    System.err.println( new Date().getTime() + ": after validate all");
 						new Renderer(request) {
 							@Override
 							public void onRendered(PdfResponse response) {
-								System.out.println(new Gson().toJson(response));
+
 								try {
+									System.err.println( new Date().getTime() + ": before final socket closed");
 									socketRequest.onJsonRequest(response);
+									System.out.println(new Gson().toJson(response));
 								} catch (BMSSocketException e) {
 									e.printStackTrace();
 								}
