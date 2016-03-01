@@ -16,6 +16,7 @@ import se.billes.pdf.renderer.exception.PluginSocketException;
 import se.billes.pdf.renderer.process.Renderer;
 import se.billes.pdf.renderer.process.Standalone;
 import se.billes.pdf.renderer.request.PdfRequest;
+import se.billes.pdf.renderer.response.PdfAction;
 import se.billes.pdf.renderer.response.PdfResponse;
 import se.billes.pdf.renderer.socket.BMSSocketRequest;
 import se.billes.pdf.renderer.socket.PluginServerSocket;
@@ -104,23 +105,17 @@ public class Main {
 						new Renderer(request) {
 							@Override
 							public void onRendered(PdfResponse response) {
-
-								try {
-									System.err.println( new Date().getTime() + ": before final socket closed");
-									socketRequest.onJsonRequest(response);
-									System.out.println(new Gson().toJson(response));
-								} catch (BMSSocketException e) {
-									e.printStackTrace();
-								}
-								
+								sendResponse(socketRequest,response);
 							}
 							
 						}.onRender();
 					}catch( PdfRequestNotValidException e ){
 						e.printStackTrace();
+						sendResponse(socketRequest, generateFailResponse(e,request));
 						
 					}catch (PdfRenderException e) {
 						e.printStackTrace();
+						sendResponse(socketRequest, generateFailResponse(e,request));
 						
 					}
 				}
@@ -135,4 +130,27 @@ public class Main {
 			}
 		}
 	}
+	
+	private static PdfResponse generateFailResponse(Exception e,PdfRequest request ){
+		PdfResponse response = new PdfResponse();
+		PdfAction action = new PdfAction();
+		action.setMessage(e.getMessage());
+		if( request != null )
+		action.setParams(request.getParams());
+		action.setSuccess(false);
+		response.setAction(action);
+		
+		return response;
+	}
+	
+	public static void sendResponse(BMSSocketRequest socketRequest,PdfResponse response){
+		try {
+			System.err.println( new Date().getTime() + ": before final socket closed");
+			socketRequest.onJsonRequest(response);
+			System.out.println(new Gson().toJson(response));
+		} catch (BMSSocketException e) {
+			e.printStackTrace();
+		}
+	}
+
 }

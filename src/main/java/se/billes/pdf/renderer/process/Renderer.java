@@ -73,11 +73,11 @@ public abstract class Renderer{
 			
 			
 		} catch (FileNotFoundException e) {
-			throw new PdfRenderException( e );
+			generatePdfRenderException(e);
 		} catch (DocumentException e) {
-			throw new PdfRenderException( e );
+			generatePdfRenderException(e);
 		}catch( Exception e ){
-			throw new PdfRenderException( e );
+			generatePdfRenderException(e);
 		}finally{
 			try{
 				document.close();
@@ -91,12 +91,17 @@ public abstract class Renderer{
 				action.setExecutionOfPdfRendering(endTime - startTime);
 				action.setTotalTimeOfExecution(endTime - pdfRequest.getStartExecutionTime());
 				action.setSuccess(true);
+				action.setParams(pdfRequest.getParams());
 				PdfResponse response = new PdfResponse();
 				response.setAction(action);
 				onRendered( response );
 			}
 		}
 
+	}
+	
+	public void generatePdfRenderException(Exception e) throws PdfRenderException{
+		throw new PdfRenderException( e );
 	}
 
 	

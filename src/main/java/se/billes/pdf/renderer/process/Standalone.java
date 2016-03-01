@@ -44,6 +44,7 @@ public class Standalone {
 	@Inject Config config;
 	@Inject PdfRequestValidator pdfRequestValidator;
 	
+	
 	public void run() throws PdfRenderException{
 		
 		try{

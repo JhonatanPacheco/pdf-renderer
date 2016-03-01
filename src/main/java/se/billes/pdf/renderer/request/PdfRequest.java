@@ -1,5 +1,10 @@
 package se.billes.pdf.renderer.request;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import se.billes.pdf.renderer.response.Param;
+
 
 /**
  * This program is built on top of iText.
@@ -31,6 +36,7 @@ public class PdfRequest {
 	private PdfDocument document;
 	private String path;
 	private long startExecutionTime;
+	private List<Param> params = new ArrayList<Param>();
 
 	public PdfDocument getDocument() {
 		return document;
@@ -54,6 +60,14 @@ public class PdfRequest {
 
 	public void setStartExecutionTime(long startExecutionTime) {
 		this.startExecutionTime = startExecutionTime;
+	}
+
+	public List<Param> getParams() {
+		return params;
+	}
+
+	public void setParams(List<Param> params) {
+		this.params = params;
 	}
 	
 }
