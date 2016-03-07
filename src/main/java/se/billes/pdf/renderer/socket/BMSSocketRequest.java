@@ -63,14 +63,15 @@ public class BMSSocketRequest {
 			try{
 				if( in != null )
 				in.close();
+			}catch( Exception e ){}
+			try{
 				if( out != null )
 				out.close();
-				
+			}catch( Exception e){}
+			try{	
 				if( requestSocket != null )
 				requestSocket.close();
-			}
-			catch(IOException e){
-			}
+			}catch(IOException e){}
 		}
 	}
 	
