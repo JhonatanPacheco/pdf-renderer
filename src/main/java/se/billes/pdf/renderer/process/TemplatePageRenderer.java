@@ -4,8 +4,10 @@ import java.io.IOException;
 
 import se.billes.pdf.renderer.exception.PdfRenderException;
 import se.billes.pdf.renderer.model.BaseElement;
+import se.billes.pdf.renderer.model.ImageInstance;
 import se.billes.pdf.renderer.model.Page;
 import se.billes.pdf.renderer.model.Template;
+import se.billes.pdf.renderer.request.factory.ImageFactory;
 import se.billes.pdf.renderer.request.factory.SizeFactory;
 
 import com.itextpdf.text.BadElementException;
@@ -66,7 +68,7 @@ public class TemplatePageRenderer {
 			pdfMirror = Image.getInstance(pageImportedPage);
 			pdfMirror.setAbsolutePosition( SizeFactory.millimetersToPostscriptPoints( width ),SizeFactory.millimetersToPostscriptPoints( height ));
 			document.newPage();
-			
+			ImageFactory.getInstances().add(new ImageInstance(pdfMirror, reader));
 			PdfContentByte cb = writer.getDirectContent();
 			try {
 				cb.addImage( pdfMirror );
