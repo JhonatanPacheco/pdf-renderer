@@ -41,15 +41,11 @@ public class ImageFactory {
 		if( file.getName().toLowerCase().endsWith( ".pdf")){	
 			PdfReader reader = new PdfReader( file.getAbsolutePath() );
 			PdfImportedPage p = cb.getPdfWriter().getImportedPage(reader, 1);
-			try{
-				reader.close();
-			}catch( Exception e ){}
-			image = Image.getInstance(p); 
-			
+			image = Image.getInstance(p);
 		}else{
 			image = Image.getInstance( file.getAbsolutePath() );
 		}
-		
+
 		return image;
 	}
 	

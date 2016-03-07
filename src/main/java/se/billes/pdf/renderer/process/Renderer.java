@@ -58,8 +58,9 @@ public abstract class Renderer{
 		File destinationPdf = new File(pdfRequest.getPath(),pdfDocument.getName());
 		Document document = new Document();
 		boolean finishedRender = false;
+		PdfWriter writer = null;
 		try {
-			PdfWriter writer = PdfWriter.getInstance( document, new FileOutputStream( destinationPdf ));
+			writer = PdfWriter.getInstance( document, new FileOutputStream( destinationPdf ));
 			document.addAuthor( "iText" );
 			writer.setBoxSize( "trim" , new SizeFactory().getTrimBoxAsRectangle(pdfDocument) );
 			document.setPageSize( new SizeFactory().getSizeAsRectangle(pdfDocument) );
@@ -80,9 +81,12 @@ public abstract class Renderer{
 			generatePdfRenderException(e);
 		}finally{
 			try{
+				writer.close();
+			}catch( Exception e ){}
+			try{
 				document.close();
-			}catch( Exception e ){	
-			}
+			}catch( Exception e ){}
+			
 			if( finishedRender ){
 				System.err.println( new Date().getTime() + ": document closed");
 				long endTime = new Date().getTime();
