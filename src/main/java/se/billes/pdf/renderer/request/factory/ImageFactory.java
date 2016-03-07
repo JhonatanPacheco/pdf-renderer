@@ -2,6 +2,11 @@ package se.billes.pdf.renderer.request.factory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import se.billes.pdf.renderer.model.ImageInstance;
 
 import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.Image;
@@ -36,25 +41,52 @@ import com.itextpdf.text.pdf.PdfReader;
  */
 public class ImageFactory {
 	
-	public Image getImageByFile( PdfContentByte cb , File file ) throws IOException, BadElementException{
+	private static List<ImageInstance> instances = new ArrayList<ImageInstance>();
+	
+	public ImageInstance getImageByFile( PdfContentByte cb , File file ) throws IOException, BadElementException{
 		Image image = null;
+		ImageInstance instance = null;
 		if( file.getName().toLowerCase().endsWith( ".pdf")){	
 			PdfReader reader = new PdfReader( file.getAbsolutePath() );
 			PdfImportedPage p = cb.getPdfWriter().getImportedPage(reader, 1);
 			image = Image.getInstance(p);
+			instance = new ImageInstance(image, reader);
 		}else{
 			image = Image.getInstance( file.getAbsolutePath() );
+			instance = new ImageInstance(image, null);
 		}
+		
+		instances.add(instance);
+		
 
-		return image;
+		return instance;
 	}
 	
+	public static List<ImageInstance> getInstances() {
+		return instances;
+	}
+
 	public boolean isPdf( File file ){
 		if( file.getName().toLowerCase().endsWith( ".pdf")){	
 			return true;
 		}
 		
 		return false;
+	}
+	
+	public static void clear(){
+		Iterator<ImageInstance> iter = instances.iterator();
+		while( iter.hasNext() ){
+			ImageInstance instance = iter.next();
+			try{
+				if( instance.getPdfReader() != null ){
+					instance.getPdfReader().close();
+					
+				}
+			}catch( Exception e ){}
+			iter.remove();
+		}
+
 	}
 	
 }

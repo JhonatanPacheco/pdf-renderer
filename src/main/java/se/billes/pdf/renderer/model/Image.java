@@ -124,9 +124,9 @@ public class Image extends BaseBlock {
 	@Override
 	public void onRender(PdfContentByte cb) throws PdfRenderException {
 		
-		com.itextpdf.text.Image image = null;
+		ImageInstance instance = null;
 		try {
-			image = new ImageFactory().getImageByFile(cb, file);
+			instance = new ImageFactory().getImageByFile(cb, file);
 		} catch (Exception e) {
 			throw new PdfRenderException(e);
 		}
@@ -146,6 +146,8 @@ public class Image extends BaseBlock {
 		
 		float width =  positions[2];
 		float height =  positions[3];
+		
+		com.itextpdf.text.Image image = instance.getImage();
 		
 		int dpiX = image.getDpiX();
 		if( dpiX == 0 ){
@@ -238,7 +240,7 @@ public class Image extends BaseBlock {
 			throw new PdfRenderException(e);
 		}
 		
-		
+	
 	}
 	
 	public float[] handleAlignment( float width, float imageWidth, float height, float imageHeight, float fitHeight){

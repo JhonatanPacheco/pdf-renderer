@@ -9,6 +9,7 @@ import se.billes.pdf.renderer.exception.PdfRenderException;
 import se.billes.pdf.renderer.model.Page;
 import se.billes.pdf.renderer.request.PdfDocument;
 import se.billes.pdf.renderer.request.PdfRequest;
+import se.billes.pdf.renderer.request.factory.ImageFactory;
 import se.billes.pdf.renderer.request.factory.SizeFactory;
 import se.billes.pdf.renderer.response.PdfAction;
 import se.billes.pdf.renderer.response.PdfResponse;
@@ -86,6 +87,8 @@ public abstract class Renderer{
 			try{
 				document.close();
 			}catch( Exception e ){}
+			
+			ImageFactory.clear();
 			
 			if( finishedRender ){
 				System.err.println( new Date().getTime() + ": document closed");
