@@ -48,16 +48,20 @@ public class BMSSocketRequest {
 		ObjectInputStream in = null;
 		Socket requestSocket = null;
 		try{
+			System.out.println("Before sending socket to bmsl");
+			System.out.println(config.getBms().getHost());
+			System.out.println(config.getBms().getPort());
+			System.out.println(new Gson().toJson(response));
 			requestSocket = new Socket( config.getBms().getHost(), config.getBms().getPort());
 			out = new OutputStreamWriter(requestSocket.getOutputStream());
 			out.write(new Gson().toJson(response));
 			out.flush();
 		}
 		catch(UnknownHostException e){
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 		catch(IOException e){
-			//e.printStackTrace(); 
+			e.printStackTrace(); 
 		}
 		finally{
 			try{

@@ -49,7 +49,7 @@ public class BMSSocketScheduler implements org.quartz.Job{
 	
 	@Override
 	public void execute(JobExecutionContext content) throws JobExecutionException {		
-		
+		System.out.println( "Before calling socket");
 		RegistryCall call = new RegistryCall();
 		RegistryAction action = new RegistryAction();
 		action.setEndpoint(config.getRegistry().getEndpoint());
