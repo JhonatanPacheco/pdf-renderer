@@ -35,8 +35,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 public class RenderParagraphs {
 	
 	public void render( PdfPCell cell, Block block ) throws PdfRenderException{
-		
-		if( block.getParagraphs() != null || block.getParagraphs().length  > 0 ){
+		if( block.getParagraphs() != null && block.getParagraphs().length  > 0 ){
 			for( AbstractParagraph paragraph : block.getParagraphs()  ){
 				paragraph.onRender( cell );
 			}

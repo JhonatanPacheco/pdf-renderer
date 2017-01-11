@@ -35,6 +35,7 @@ public class PdfRequest {
 	
 	private PdfDocument document;
 	private String path;
+	private String key;
 	private long startExecutionTime;
 	private List<Param> params = new ArrayList<Param>();
 
@@ -68,6 +69,14 @@ public class PdfRequest {
 
 	public void setParams(List<Param> params) {
 		this.params = params;
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
 	}
 	
 }

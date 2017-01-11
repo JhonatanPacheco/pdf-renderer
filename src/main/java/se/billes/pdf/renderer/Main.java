@@ -1,29 +1,16 @@
 package se.billes.pdf.renderer;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
+import se.billes.pdf.firebase.FirebaseInitializer;
+import se.billes.pdf.firebase.FirebaseSchedule;
 import se.billes.pdf.json.ConfigNotValidException;
-import se.billes.pdf.json.ConfigReader;
 import se.billes.pdf.module.ConfigModule;
+import se.billes.pdf.parser.ArgsParser;
 import se.billes.pdf.registry.Config;
-import se.billes.pdf.registry.Endpoint;
-import se.billes.pdf.renderer.exception.BMSSocketException;
-import se.billes.pdf.renderer.exception.PdfRenderException;
-import se.billes.pdf.renderer.exception.PdfRequestNotValidException;
-import se.billes.pdf.renderer.exception.PluginSocketException;
-import se.billes.pdf.renderer.process.Renderer;
-import se.billes.pdf.renderer.process.Standalone;
-import se.billes.pdf.renderer.request.PdfRequest;
-import se.billes.pdf.renderer.response.PdfAction;
-import se.billes.pdf.renderer.response.PdfResponse;
-import se.billes.pdf.renderer.socket.BMSSocketRequest;
-import se.billes.pdf.renderer.socket.PluginServerSocket;
-import se.billes.pdf.renderer.validator.PdfRequestValidator;
-import se.billes.pdf.schedule.BMSSocketScheduler;
 
-import com.google.gson.Gson;
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -55,102 +42,28 @@ import com.google.inject.Injector;
  */
 public class Main {
 	
-	public static void main( String[] args ){
+	public static void main(String args[]) {
 		
-		if( args.length == 0 ){
-			System.err.println( "First argument must be the path to the config file" );
-			System.exit(0);
-		}
 		Config config = null;
-		System.err.println( new Date().getTime() + ": before read config");
 		try {
-			config = new ConfigReader(args[0]).readConfig();
-		} catch (ConfigNotValidException e) {
-			System.err.println( e.getMessage() );
-			System.exit(0);
+			config = new ArgsParser(args).parse();
+		} catch (ConfigNotValidException e1) {
+			System.exit(1);
 		}
-		
-		System.err.println( new Date().getTime() + ": after read config");
+		 
 		List<AbstractModule> modules = new ArrayList<AbstractModule>();
-		modules.add( new ConfigModule(config));
-		if( ! config.getRun().isStandAlone() ){
-			modules.add( new org.nnsoft.guice.guartz.QuartzModule(){
-				@Override
-				protected void schedule() {
-					scheduleJob( BMSSocketScheduler.class );
-				}
-			});
-		}
-		System.err.println( new Date().getTime() + ": before creating injector");
+		modules.add(new ConfigModule(config));	     
+	     
 		final Injector injector = Guice.createInjector(modules);
-		System.err.println( new Date().getTime() + ": after creating injector");
-		if( config.getRun().isStandAlone() ){
-			try {
-				System.err.println( new Date().getTime() + ": before running standalone");
-				injector.getInstance(Standalone.class).run();
-			} catch (PdfRenderException e) {
-				e.printStackTrace();
-			}
-		}else{
-			PluginServerSocket server = new PluginServerSocket(){	
-				@Override
-				protected void onRequestProcessed( PdfRequest request ) throws PdfRequestNotValidException{
-					System.err.println( new Date().getTime() + ": before creating injector socket");
-					final BMSSocketRequest socketRequest = injector.getInstance(BMSSocketRequest.class);
-					System.err.println( new Date().getTime() + ": after creating injector socket");
-					try{
-						System.err.println( new Date().getTime() + ": before validate all");
-					    injector.getInstance(PdfRequestValidator.class).validateAll(request);
-					    System.err.println( new Date().getTime() + ": after validate all");
-						new Renderer(request) {
-							@Override
-							public void onRendered(PdfResponse response) {
-								sendResponse(socketRequest,response);
-							}
-							
-						}.onRender();
-					}catch( PdfRequestNotValidException e ){
-						e.printStackTrace();
-						sendResponse(socketRequest, generateFailResponse(e,request));
-						
-					}catch (PdfRenderException e) {
-						e.printStackTrace();
-						sendResponse(socketRequest, generateFailResponse(e,request));
-						
-					}
-				}
-			};
-
-			try {
-				Endpoint endpoint = config.getRegistry().getEndpoint();
-				server.setPort( endpoint.getPort());
-				server.onStart();
-			} catch (PluginSocketException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	private static PdfResponse generateFailResponse(Exception e,PdfRequest request ){
-		PdfResponse response = new PdfResponse();
-		PdfAction action = new PdfAction();
-		action.setMessage(e.getMessage());
-		if( request != null )
-		action.setParams(request.getParams());
-		action.setSuccess(false);
-		response.setAction(action);
-		
-		return response;
-	}
-	
-	public static void sendResponse(BMSSocketRequest socketRequest,PdfResponse response){
+		FirebaseInitializer initializer = injector.getInstance(FirebaseInitializer.class);
+		 
 		try {
-			System.err.println( new Date().getTime() + ": before final socket closed");
-			socketRequest.onJsonRequest(response);
-			System.out.println(new Gson().toJson(response));
-		} catch (BMSSocketException e) {
+			initializer.init();
+			FirebaseSchedule schedule = injector.getInstance(FirebaseSchedule.class);
+			schedule.onSchedule();
+		} catch (FileNotFoundException e) {
 			e.printStackTrace();
-		}
+			System.exit(1);
+		}		
 	}
-
 }

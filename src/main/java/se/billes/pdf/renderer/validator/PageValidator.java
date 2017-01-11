@@ -52,7 +52,7 @@ public class PageValidator implements IPdfRequestValidatable {
 					throw new PdfRequestNotValidException( "path for template can not be null" );
 				
 				}else{
-					File file = new File( config.getRun().getMountPath(), page.getTemplate().getTemplatePath());
+					File file = new File( config.getBms().getMountPath(), page.getTemplate().getTemplatePath());
 					if( ! file.exists() ){
 						throw new PdfRequestNotValidException( "Could not find file for template: " + file.getAbsolutePath() );
 					}

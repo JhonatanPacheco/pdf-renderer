@@ -48,7 +48,7 @@ public class FontValidator implements IPdfRequestValidatable{
 		if( document.getFonts() != null && document.getFonts().length > 0 ){
 			for( Font font : document.getFonts() ){
 				try {
-					File file = new File( config.getRun().getMountPath(),font.getPath() );
+					File file = new File( config.getBms().getMountPath(),font.getPath() );
 					if( ! file.exists() ){
 						throw new PdfRequestNotValidException( "Font with path: " + file.getAbsolutePath() + " does not exists" );
 					}
@@ -61,7 +61,8 @@ public class FontValidator implements IPdfRequestValidatable{
 				}
 			}
 		}else{
-			throw new PdfRequestNotValidException( "You need to specify fonts" );
+			// TODO: Do we really need to force this. Only blocks, images?
+			//throw new PdfRequestNotValidException( "You need to specify fonts" );
 		}
 	}
 }

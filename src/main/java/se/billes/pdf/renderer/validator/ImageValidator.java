@@ -65,7 +65,7 @@ public class ImageValidator {
 			){
 				throw new PdfRequestNotValidException( errorFactory.appendErrorString("Image must be jpg or pdf" ));
 			}
-			File file = new File(config.getRun().getMountPath(), image.getPath() );
+			File file = new File(config.getBms().getMountPath(), image.getPath() );
 			if( ! file.exists() ){
 				throw new PdfRequestNotValidException( errorFactory.appendErrorString("Could not find path: (" + image.getPath() + ") for image"));
 			}

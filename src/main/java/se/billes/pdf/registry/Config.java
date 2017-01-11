@@ -26,30 +26,21 @@ package se.billes.pdf.registry;
  * serving PDFs on the fly in a web application, shipping iText with a closed source product.
  */
 public class Config {
-	private Registry registry;
-    private Endpoint bms;
-    private Environment run;
-    
+    private Bms bms;
+    private FirebaseConfig firebase;
 	
-    public Registry getRegistry() {
-		return registry;
+  
+	public FirebaseConfig getFirebase() {
+		return firebase;
 	}
-	public void setRegistry(Registry registry) {
-		this.registry = registry;
+	public void setFirebase(FirebaseConfig firebase) {
+		this.firebase = firebase;
 	}
-
-	public Endpoint getBms() {
+	public Bms getBms() {
 		return bms;
 	}
-	public void setBms(Endpoint bms) {
+	public void setBms(Bms bms) {
 		this.bms = bms;
-	}
-	
-	public Environment getRun() {
-		return run;
-	}
-	public void setRun(Environment run) {
-		this.run = run;
 	}
 
 }

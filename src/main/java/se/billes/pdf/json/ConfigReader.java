@@ -44,33 +44,52 @@ public class ConfigReader {
 	}
 	
 	private void validateConfig(Config config ) throws ConfigNotValidException{
-		if( config.getRun() == null ){
-			throw new ConfigNotValidException( "Could not find run in config" );
-		}
-		if( config.getRun().getEnvironment() == null ){
-			throw new ConfigNotValidException( "Enviroment can not be null" );
+		if( config.getFirebase() == null ){
+			throw new ConfigNotValidException( "Could not find firebase in config" );
 		}
 		
-		if( !( config.getRun().getEnvironment().equals( "standalone" ) || config.getRun().getEnvironment().equals( "server" ) ) ){
-			throw new ConfigNotValidException( "Enviroment must be standalone or server" );
+		if( config.getBms() == null ){
+			throw new ConfigNotValidException( "Could not find bms in config" );
 		}
 		
-		if( config.getRun().getMountPath() == null ){
-			throw new ConfigNotValidException( "Mount path can not be null" );
-		}
-		File file = new File(config.getRun().getMountPath());
-		if( ! file.exists() || ! file.isDirectory() ){
-			throw new ConfigNotValidException( "Could not find mount path. Must be a directory" );
+		if( config.getBms().getMountPath() == null ){
+			throw new ConfigNotValidException( "mountPath can not be null" );
 		}
 		
-		if( config.getRun().isStandAlone() ){
-			if( config.getRun().getPathToJsonDocument() == null ){
-				throw new ConfigNotValidException( "You must specify path to json document when running in stand alone" );
-			}
-			if( ! new File(config.getRun().getPathToJsonDocument()).exists() ){
-				throw new ConfigNotValidException( "Could not find json file" );
-			}
+		if( config.getFirebase().getCompletedPath() == null ){
+			throw new ConfigNotValidException( "completedPath can not be null" );
 		}
+		
+		if( config.getFirebase().getDatabaseURL() == null ){
+			throw new ConfigNotValidException( "databaseUrl can not be null" );
+		}
+		
+		if( config.getFirebase().getIncomingPath() == null ){
+			throw new ConfigNotValidException( "incomingPath can not be null" );
+		}
+		
+		if( config.getFirebase().getPluginPath() == null ){
+			throw new ConfigNotValidException( "pluginPath can not be null" );
+		}
+		
+		if( config.getFirebase().getRunningPath() == null ){
+			throw new ConfigNotValidException( "runningPath can not be null" );
+		}
+		
+		if( config.getFirebase().getServiceAccountFile() == null ){
+			throw new ConfigNotValidException( "serviceAccountFile can not be null" );
+		}
+
+		File file = new File(config.getFirebase().getServiceAccountFile());
+		if( ! file.exists() ){
+			throw new ConfigNotValidException( "Could not find seriveAccountFile path." );
+		}
+		
+		file = new File(config.getBms().getMountPath());
+		if( ! file.exists() && !file.isDirectory() ){
+			throw new ConfigNotValidException( "Could not find mountPath from bms. Must be a directory." );
+		}
+		
 	}
 	
 	public Config readConfig() throws ConfigNotValidException{
