@@ -3,6 +3,7 @@ package se.billes.pdf.firebase;
 import java.util.Date;
 
 import se.billes.pdf.firebase.model.FirebaseRequest;
+import se.billes.pdf.firebase.model.Kalle;
 import se.billes.pdf.json.BlockTypeSelector;
 import se.billes.pdf.process.Delegator;
 import se.billes.pdf.registry.Config;
@@ -34,12 +35,16 @@ public class FirebaseSchedule {
 	
 	public void onSchedule() {
 
-		final DatabaseReference ref = getIncomingReference();	
-		ref.limitToFirst(1).addValueEventListener(new ValueEventListener() {
+		final DatabaseReference ref = getIncomingReference();
+		
+		ValueEventListener listener = new ValueEventListener() {
 			
 			@Override
 			public void onDataChange(DataSnapshot snapshot) {
+				System.err.println("you");
+				ref.removeEventListener(this);
 				if (snapshot.getChildrenCount() > 0 ){
+					System.out.println("On data change");
 					onTransaction(ref.child(snapshot.getChildren().iterator().next().getKey()));
 				}
 			}
@@ -47,7 +52,9 @@ public class FirebaseSchedule {
 			@Override
 			public void onCancelled(DatabaseError error) {
 			}
-		});
+		};
+		
+		ref.limitToFirst(1).addValueEventListener(listener);
 	}
 	
 	private void onTransaction (final DatabaseReference childRef) {
@@ -64,15 +71,15 @@ public class FirebaseSchedule {
 						FirebaseRequest val = new Gson().fromJson(json, FirebaseRequest.class);
 						val.getInput().setStartExecutionTime(new Date().getTime());
 						System.err.println(val);
+						childRef.removeValue();
 						data.setValue(val);
+						return Transaction.success(data);
 					} catch (Exception e ){
 						e.printStackTrace();
 						childRef.removeValue();
 						return Transaction.abort();
 					}
-				    
-					childRef.removeValue();
-					return Transaction.success(data);
+					
 				} else {
 					return Transaction.success(data);
 				}
@@ -81,8 +88,11 @@ public class FirebaseSchedule {
 
 			@Override
 			public void onComplete(DatabaseError error, boolean committed, DataSnapshot snapshot) {
+				
+
 				if (committed) {
 					System.err.println(snapshot);
+					System.err.println("After snapshot");
 					System.out.println(new Gson().toJson(snapshot.getValue()));
 					FirebaseDatabase database = FirebaseDatabase.getInstance();
 				    DatabaseReference ref = database.getReference(config.getFirebase().getRunningPath()).child(snapshot.getKey());
@@ -94,7 +104,7 @@ public class FirebaseSchedule {
 					if (error != null) {
 						System.err.println(error);
 					}
-					onSchedule();
+					//onSchedule();
 				}
 			}
 		});

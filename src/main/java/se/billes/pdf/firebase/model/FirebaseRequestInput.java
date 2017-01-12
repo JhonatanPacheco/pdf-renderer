@@ -7,7 +7,7 @@ public class FirebaseRequestInput {
 	private FirebaseDocument document;
 	private String path;
 	private String key;
-	private long startExecutionTime;
+	private Long startExecutionTime;
 	
 	public FirebaseRequestInput() {
 		
@@ -33,7 +33,7 @@ public class FirebaseRequestInput {
 		return startExecutionTime;
 	}
 
-	public void setStartExecutionTime(long startExecutionTime) {
+	public void setStartExecutionTime(Long startExecutionTime) {
 		this.startExecutionTime = startExecutionTime;
 	}
 
