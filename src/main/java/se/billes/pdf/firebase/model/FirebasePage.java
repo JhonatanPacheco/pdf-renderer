@@ -7,18 +7,12 @@ import com.google.firebase.database.IgnoreExtraProperties;
 @IgnoreExtraProperties
 public class FirebasePage {
 	
-	private List<FirebaseBlock> blocks;
-	//private Template template;
+	public List<FirebaseBlock> blocks;
+	public Template template;
 	
-	public FirebasePage() {
-		
+	class Template{
+		public String path;
+		public Integer page;
 	}
-
-	public List<FirebaseBlock> getBlocks() {
-		return blocks;
-	}
-
-	public void setBlocks(List<FirebaseBlock> blocks) {
-		this.blocks = blocks;
-	}
+	
 }

@@ -1,5 +1,5 @@
 package se.billes.pdf.renderer.response;
 
-public class AbstractAction {
-
+public interface IOutput {
+	
 }

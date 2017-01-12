@@ -10,6 +10,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.OnDisconnect;
 import com.google.firebase.tasks.OnCompleteListener;
 import com.google.firebase.tasks.Task;
 import com.google.inject.Inject;
@@ -25,6 +26,9 @@ public class FirebaseInitializer {
 		.build();
 		FirebaseApp.initializeApp(options);
 		DatabaseReference ref = FirebaseDatabase.getInstance().getReference(config.getFirebase().getPluginPath());
+		OnDisconnect disconnect = ref.onDisconnect();
+		disconnect.removeValue();
+		
 		final CountDownLatch sync = new CountDownLatch(1);
 		ref.push().setValue("connected")
 		   .addOnCompleteListener(new OnCompleteListener<Void>() {

@@ -6,38 +6,26 @@ import com.google.firebase.database.IgnoreExtraProperties;
 
 @IgnoreExtraProperties
 public class FirebaseDocument {
-	private List<Integer> size;
-	private List<FirebaseCutmarks> cutmarks;
-	private String name;
-	private List<FirebasePage> pages;
+	public List<Integer> size;
+	public Cutmarks cutmarks;
+	public String name;
+	public List<FirebasePage> pages;
+	public List<Color> colors;
+	public List<Font> fonts;
 	
-	public FirebaseDocument(){
-		
+	class Cutmarks{
+		public Boolean ignoreCutStroke;
 	}
 	
-	public List<Integer> getSize() {
-		return size;
+	class Color {
+		public String ref;
+		public List<Double> color;
+	
 	}
-	public void setSize(List<Integer> size) {
-		this.size = size;
+	
+	class Font {
+		public String ref;
+		public String encoding;
+		public String path;
 	}
-	public List<FirebaseCutmarks> getCutmarks() {
-		return cutmarks;
-	}
-	public void setCutmarks(List<FirebaseCutmarks> cutmarks) {
-		this.cutmarks = cutmarks;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public List<FirebasePage> getPages() {
-		return pages;
-	}
-	public void setPages(List<FirebasePage> pages) {
-		this.pages = pages;
-	}
-
 }

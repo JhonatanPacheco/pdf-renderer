@@ -1,5 +1,7 @@
 package se.billes.pdf.renderer.response;
 
+import se.billes.pdf.firebase.model.FirebaseRequestInput;
+
 
 /**
  * This program is built on top of iText.
@@ -26,20 +28,70 @@ package se.billes.pdf.renderer.response;
  * applications. These activities include: offering paid services to customers as an ASP, 
  * serving PDFs on the fly in a web application, shipping iText with a closed source product.
  */
-public class PdfResponse extends AbstractResponse{
+public class PdfResponse{
 	
-	private String type = "response";
-	private PdfAction action;
+	private String type;
+	private String chainId;
+	private Integer triggerIndex;
+	private IOutput output;
+	private Long executionOfPdfRendering;
+	private Long totalTimeOfExecution;
+	private FirebaseRequestInput payload;
 	
 	
 	public String getType() {
 		return type;
 	}
-	public PdfAction getAction() {
-		return action;
+
+	public IOutput getOutput() {
+		return output;
 	}
-	public void setAction(PdfAction action) {
-		this.action = action;
+	public void setOutput(IOutput output) {
+		this.output = output;
+	}
+
+	public String getChainId() {
+		return chainId;
+	}
+
+	public void setChainId(String chainId) {
+		this.chainId = chainId;
+	}
+
+	public Integer getTriggerIndex() {
+		return triggerIndex;
+	}
+
+	public void setTriggerIndex(Integer triggerIndex) {
+		this.triggerIndex = triggerIndex;
+	}
+
+	public Long getExecutionOfPdfRendering() {
+		return executionOfPdfRendering;
+	}
+
+	public void setExecutionOfPdfRendering(Long executionOfPdfRendering) {
+		this.executionOfPdfRendering = executionOfPdfRendering;
+	}
+
+	public Long getTotalTimeOfExecution() {
+		return totalTimeOfExecution;
+	}
+
+	public void setTotalTimeOfExecution(Long totalTimeOfExecution) {
+		this.totalTimeOfExecution = totalTimeOfExecution;
+	}
+
+	public FirebaseRequestInput getPayload() {
+		return payload;
+	}
+
+	public void setPayload(FirebaseRequestInput payload) {
+		this.payload = payload;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 	
 	

@@ -10,8 +10,8 @@ import se.billes.pdf.renderer.model.Page;
 import se.billes.pdf.renderer.request.PdfDocument;
 import se.billes.pdf.renderer.request.factory.ImageFactory;
 import se.billes.pdf.renderer.request.factory.SizeFactory;
-import se.billes.pdf.renderer.response.PdfAction;
 import se.billes.pdf.renderer.response.PdfResponse;
+import se.billes.pdf.renderer.response.SucceededOutput;
 import se.billes.pdf.request.incoming.InputRequest;
 
 import com.itextpdf.text.Document;
@@ -91,15 +91,15 @@ public abstract class Renderer{
 			ImageFactory.clear();
 			
 			if( finishedRender ){
-				System.err.println( new Date().getTime() + ": document closed");
 				long endTime = new Date().getTime();
-				PdfAction action = new PdfAction();
-				action.setFile( destinationPdf.getAbsolutePath() );
-				action.setExecutionOfPdfRendering(endTime - startTime);
-				action.setTotalTimeOfExecution(endTime - pdfRequest.getStartExecutionTime());
-				action.setSuccess(true);
+				System.err.println( endTime + ": document closed");
 				PdfResponse response = new PdfResponse();
-				response.setAction(action);
+				response.setType("success");
+				SucceededOutput output = new SucceededOutput();
+				output.setFile(destinationPdf.getAbsolutePath());
+				response.setExecutionOfPdfRendering(endTime - startTime);
+				response.setTotalTimeOfExecution((endTime - pdfRequest.getStartExecutionTime()));
+				response.setOutput(output);
 				onRendered( response );
 			}
 		}

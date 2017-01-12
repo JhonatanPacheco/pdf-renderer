@@ -79,6 +79,8 @@ public class PhraseValidator {
 		int phraseCount = 0;
 		for( AbstractPhrase abstractPhrase : paragraph.getPhrases() ){
 			
+			abstractPhrase.setParagraph(paragraph);
+			
 			DocumentErrorFactory errorFactory = new DocumentErrorFactory()
 			.withPageIndex(pageIndex)
 			.withBlockIndex(blockIndex)

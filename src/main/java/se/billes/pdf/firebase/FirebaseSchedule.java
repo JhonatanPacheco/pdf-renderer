@@ -33,9 +33,7 @@ public class FirebaseSchedule {
 	}
 	
 	public void onSchedule() {
-
 		final DatabaseReference ref = getIncomingReference();
-		
 		ValueEventListener listener = new ValueEventListener() {
 			
 			@Override
@@ -60,14 +58,9 @@ public class FirebaseSchedule {
 			public Result doTransaction(MutableData data) {
 				if (data.getValue() != null) {
 					try {
-						
-						Gson gson = new BlockTypeSelector().createGson();
 						String json = new Gson().toJson(data.getValue());
-						//IncomingRequest req = gson.fromJson(json, IncomingRequest.class);
-						//req.getInput().setStartExecutionTime(new Date().getTime());
 						FirebaseRequest val = new Gson().fromJson(json, FirebaseRequest.class);
-						val.getInput().setStartExecutionTime(new Date().getTime());
-						System.err.println(val);
+						val.input.startExecutionTime = new Date().getTime();
 						childRef.removeValue();
 						data.setValue(val);
 						return Transaction.success(data);
@@ -75,46 +68,30 @@ public class FirebaseSchedule {
 						e.printStackTrace();
 						childRef.removeValue();
 						return Transaction.abort();
-					}
-					
+					}	
 				} else {
 					return Transaction.success(data);
 				}
-				
 			}
 
 			@Override
 			public void onComplete(DatabaseError error, boolean committed, DataSnapshot snapshot) {
-				
-
-				if (committed) {
-					System.err.println(snapshot);
-					System.err.println("After snapshot");
-					System.out.println(new Gson().toJson(snapshot.getValue()));
+				if (committed) {	
+					String json = new Gson().toJson(snapshot.getValue());
+					Gson gson = new BlockTypeSelector().createGson();
+					IncomingRequest incomingRequest = gson.fromJson(json, IncomingRequest.class);
 					FirebaseDatabase database = FirebaseDatabase.getInstance();
 				    DatabaseReference ref = database.getReference(config.getFirebase().getRunningPath()).child(snapshot.getKey());
 					ref.setValue(snapshot.getValue());
-					IncomingRequest request = fromDataSnapShot(snapshot);
-					request.setKey(snapshot.getKey());
-					delegator.execute(request);
+					incomingRequest.setKey(snapshot.getKey());
+					delegator.execute(incomingRequest, json);
 				}else {
 					if (error != null) {
 						System.err.println(error);
 					}
-					//onSchedule();
+					onSchedule();
 				}
 			}
 		});
 	}
-	
-	private IncomingRequest fromDataSnapShot (DataSnapshot snapshot) {
-		if (snapshot.getChildrenCount() > 0) {
-			snapshot.getChildren().iterator().next();
-			String val = snapshot.getValue().toString();
-			Gson gson = new BlockTypeSelector().createGson();
-			return gson.fromJson(val.replace("=",  ":"), IncomingRequest.class);
-		}
-		return null;
-	}
-	
 }
