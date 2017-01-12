@@ -10,6 +10,7 @@ import se.billes.pdf.renderer.exception.PdfRequestNotValidException;
 import se.billes.pdf.renderer.process.Renderer;
 import se.billes.pdf.renderer.response.FailedOutput;
 import se.billes.pdf.renderer.response.PdfResponse;
+import se.billes.pdf.renderer.response.SucceededOutput;
 import se.billes.pdf.renderer.validator.PdfRequestValidator;
 import se.billes.pdf.request.incoming.IncomingRequest;
 import se.billes.pdf.request.incoming.InputRequest;
@@ -32,6 +33,9 @@ public class Delegator {
 				@Override
 				public void onRendered(PdfResponse response) {
 					response = getCommonResponse(request, response, payload);
+					SucceededOutput output = (SucceededOutput)response.getOutput();
+					output.setFile(output.getFile().replace(config.getBms().getMountPath(),""));
+					response.setOutput(output);
 					setCompleted(request, response);
 				}
 				

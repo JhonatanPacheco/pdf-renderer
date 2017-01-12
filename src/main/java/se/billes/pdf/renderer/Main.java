@@ -64,23 +64,6 @@ public class Main {
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 			System.exit(1);
-		}		
-		
-		Thread t = new Thread(new Runnable() {
-			
-			@Override
-			public void run() {
-				while(true) {
-					try {
-						Thread.sleep(10000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				
-			}
-		});
-		t.start();
+		}
 	}
 }
