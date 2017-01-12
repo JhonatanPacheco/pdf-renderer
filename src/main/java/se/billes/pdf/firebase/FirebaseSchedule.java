@@ -3,7 +3,6 @@ package se.billes.pdf.firebase;
 import java.util.Date;
 
 import se.billes.pdf.firebase.model.FirebaseRequest;
-import se.billes.pdf.firebase.model.Kalle;
 import se.billes.pdf.json.BlockTypeSelector;
 import se.billes.pdf.process.Delegator;
 import se.billes.pdf.registry.Config;
@@ -41,10 +40,8 @@ public class FirebaseSchedule {
 			
 			@Override
 			public void onDataChange(DataSnapshot snapshot) {
-				System.err.println("you");
-				ref.removeEventListener(this);
 				if (snapshot.getChildrenCount() > 0 ){
-					System.out.println("On data change");
+					ref.removeEventListener(this);
 					onTransaction(ref.child(snapshot.getChildren().iterator().next().getKey()));
 				}
 			}
