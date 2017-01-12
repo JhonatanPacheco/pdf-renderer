@@ -26,11 +26,13 @@ public class FirebaseInitializer {
 		.build();
 		FirebaseApp.initializeApp(options);
 		DatabaseReference ref = FirebaseDatabase.getInstance().getReference(config.getFirebase().getPluginPath());
-		OnDisconnect disconnect = ref.onDisconnect();
-		disconnect.removeValue();
+		
 		
 		final CountDownLatch sync = new CountDownLatch(1);
-		ref.push().setValue("connected")
+		DatabaseReference pushref = ref.push();
+		OnDisconnect disconnect = pushref.onDisconnect();
+		disconnect.removeValue();
+		pushref.setValue("connected")
 		   .addOnCompleteListener(new OnCompleteListener<Void>() {
 		      public void onComplete(Task<Void> task) {
 		        sync.countDown();
