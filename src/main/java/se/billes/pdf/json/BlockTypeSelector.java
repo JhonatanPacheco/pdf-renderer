@@ -28,6 +28,7 @@ package se.billes.pdf.json;
  */
 import io.gsonfire.GsonFireBuilder;
 import io.gsonfire.TypeSelector;
+import io.gsonfire.gson.TypeSelectorTypeAdapterFactory;
 import se.billes.pdf.renderer.model.Barcode;
 import se.billes.pdf.renderer.model.BaseElement;
 import se.billes.pdf.renderer.model.Block;
@@ -42,6 +43,7 @@ import se.billes.pdf.renderer.model.text.Paragraph;
 import se.billes.pdf.renderer.model.text.Phrase;
 import se.billes.pdf.renderer.model.text.TableCell;
 import se.billes.pdf.renderer.model.text.TableParagraph;
+import se.billes.pdf.request.incoming.InputRequest;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;

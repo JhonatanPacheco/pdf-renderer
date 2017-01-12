@@ -13,7 +13,7 @@ import se.billes.pdf.renderer.model.Line;
 import se.billes.pdf.renderer.model.Page;
 import se.billes.pdf.renderer.model.QRCode;
 import se.billes.pdf.renderer.request.PdfDocument;
-import se.billes.pdf.renderer.request.PdfRequest;
+import se.billes.pdf.request.incoming.InputRequest;
 
 import com.google.inject.Inject;
 
@@ -62,7 +62,7 @@ public class BaseElementValidator implements IPdfRequestValidatable {
 	
 	
 	@Override
-	public void validate(PdfRequest request) throws PdfRequestNotValidException {
+	public void validate(InputRequest request) throws PdfRequestNotValidException {
 		PdfDocument document = request.getDocument();
 		int pageCount = 0;
 		for( Page page : document.getPages() ){

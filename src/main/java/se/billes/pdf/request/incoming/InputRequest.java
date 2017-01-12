@@ -1,9 +1,6 @@
-package se.billes.pdf.renderer.request;
+package se.billes.pdf.request.incoming;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import se.billes.pdf.renderer.response.Param;
+import se.billes.pdf.renderer.request.PdfDocument;
 
 
 /**
@@ -31,14 +28,13 @@ import se.billes.pdf.renderer.response.Param;
  * applications. These activities include: offering paid services to customers as an ASP, 
  * serving PDFs on the fly in a web application, shipping iText with a closed source product.
  */
-public class PdfRequest {
+public class InputRequest {
 	
 	private PdfDocument document;
 	private String path;
 	private String key;
 	private long startExecutionTime;
-	private List<Param> params = new ArrayList<Param>();
-
+	
 	public PdfDocument getDocument() {
 		return document;
 	}
@@ -61,14 +57,6 @@ public class PdfRequest {
 
 	public void setStartExecutionTime(long startExecutionTime) {
 		this.startExecutionTime = startExecutionTime;
-	}
-
-	public List<Param> getParams() {
-		return params;
-	}
-
-	public void setParams(List<Param> params) {
-		this.params = params;
 	}
 
 	public String getKey() {

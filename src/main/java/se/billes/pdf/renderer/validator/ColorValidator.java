@@ -4,8 +4,8 @@ import se.billes.pdf.renderer.exception.CreateColorException;
 import se.billes.pdf.renderer.exception.PdfRequestNotValidException;
 import se.billes.pdf.renderer.model.Color;
 import se.billes.pdf.renderer.request.PdfDocument;
-import se.billes.pdf.renderer.request.PdfRequest;
 import se.billes.pdf.renderer.request.factory.ColorFactory;
+import se.billes.pdf.request.incoming.InputRequest;
 
 /**
  * This program is built on top of iText.
@@ -35,7 +35,7 @@ import se.billes.pdf.renderer.request.factory.ColorFactory;
 public class ColorValidator implements IPdfRequestValidatable{ 
 	
 	@Override
-	public void validate(PdfRequest request) throws PdfRequestNotValidException {
+	public void validate(InputRequest request) throws PdfRequestNotValidException {
 		PdfDocument document = request.getDocument();
 		if( document.getColors() != null && document.getColors().length > 0 ){
 			for( Color color : document.getColors() ){

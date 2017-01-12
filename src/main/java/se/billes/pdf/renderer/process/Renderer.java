@@ -8,11 +8,11 @@ import java.util.Date;
 import se.billes.pdf.renderer.exception.PdfRenderException;
 import se.billes.pdf.renderer.model.Page;
 import se.billes.pdf.renderer.request.PdfDocument;
-import se.billes.pdf.renderer.request.PdfRequest;
 import se.billes.pdf.renderer.request.factory.ImageFactory;
 import se.billes.pdf.renderer.request.factory.SizeFactory;
 import se.billes.pdf.renderer.response.PdfAction;
 import se.billes.pdf.renderer.response.PdfResponse;
+import se.billes.pdf.request.incoming.InputRequest;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -45,9 +45,9 @@ import com.itextpdf.text.pdf.PdfWriter;
  */
 public abstract class Renderer{
 
-	private PdfRequest pdfRequest;
+	private InputRequest pdfRequest;
 	
-	public Renderer( PdfRequest pdfRequest ){
+	public Renderer( InputRequest pdfRequest ){
 		this.pdfRequest = pdfRequest;
 	}
 	
@@ -98,7 +98,6 @@ public abstract class Renderer{
 				action.setExecutionOfPdfRendering(endTime - startTime);
 				action.setTotalTimeOfExecution(endTime - pdfRequest.getStartExecutionTime());
 				action.setSuccess(true);
-				action.setParams(pdfRequest.getParams());
 				PdfResponse response = new PdfResponse();
 				response.setAction(action);
 				onRendered( response );

@@ -5,7 +5,7 @@ import java.io.File;
 import se.billes.pdf.registry.Config;
 import se.billes.pdf.renderer.exception.PdfRequestNotValidException;
 import se.billes.pdf.renderer.model.Image;
-import se.billes.pdf.renderer.request.PdfRequest;
+import se.billes.pdf.request.incoming.InputRequest;
 
 /**
  * This program is built on top of iText.
@@ -52,7 +52,7 @@ public class ImageValidator {
 		return this;
 	}
 	
-	public void validate(PdfRequest request, Image image) throws PdfRequestNotValidException {
+	public void validate(InputRequest request, Image image) throws PdfRequestNotValidException {
 		
 		DocumentErrorFactory errorFactory = new DocumentErrorFactory().withPageIndex(pageIndex).withBlockIndex(blockIndex);
 

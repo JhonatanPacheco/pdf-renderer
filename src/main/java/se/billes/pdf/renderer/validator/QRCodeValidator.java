@@ -3,8 +3,8 @@ package se.billes.pdf.renderer.validator;
 import se.billes.pdf.renderer.exception.PdfRequestNotValidException;
 import se.billes.pdf.renderer.model.QRCode;
 import se.billes.pdf.renderer.request.PdfDocument;
-import se.billes.pdf.renderer.request.PdfRequest;
 import se.billes.pdf.renderer.request.factory.ColorFactory;
+import se.billes.pdf.request.incoming.InputRequest;
 
 import com.itextpdf.text.BaseColor;
 
@@ -48,7 +48,7 @@ public class QRCodeValidator {
 		return this;
 	}
 	
-	public void validate(PdfRequest request, QRCode qr) throws PdfRequestNotValidException {
+	public void validate(InputRequest request, QRCode qr) throws PdfRequestNotValidException {
 		
 		PdfDocument document = request.getDocument();
 		DocumentErrorFactory errorFactory = new DocumentErrorFactory().withPageIndex(pageIndex).withBlockIndex(blockIndex);

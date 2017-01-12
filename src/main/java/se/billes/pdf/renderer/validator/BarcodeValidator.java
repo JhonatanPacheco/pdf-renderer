@@ -4,9 +4,9 @@ import se.billes.pdf.renderer.exception.PdfRequestNotValidException;
 import se.billes.pdf.renderer.model.Barcode;
 import se.billes.pdf.renderer.model.Barcode.BarCodeType;
 import se.billes.pdf.renderer.request.PdfDocument;
-import se.billes.pdf.renderer.request.PdfRequest;
 import se.billes.pdf.renderer.request.factory.ColorFactory;
 import se.billes.pdf.renderer.request.factory.FontFactory;
+import se.billes.pdf.request.incoming.InputRequest;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.pdf.BaseFont;
@@ -52,7 +52,7 @@ public class BarcodeValidator {
 		return this;
 	}
 	
-	public void validate(PdfRequest request, Barcode barcode) throws PdfRequestNotValidException {
+	public void validate(InputRequest request, Barcode barcode) throws PdfRequestNotValidException {
 		
 		PdfDocument document = request.getDocument();
 		

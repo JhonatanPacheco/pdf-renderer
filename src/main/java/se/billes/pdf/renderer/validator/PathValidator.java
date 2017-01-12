@@ -4,7 +4,7 @@ import java.io.File;
 
 import se.billes.pdf.registry.Config;
 import se.billes.pdf.renderer.exception.PdfRequestNotValidException;
-import se.billes.pdf.renderer.request.PdfRequest;
+import se.billes.pdf.request.incoming.InputRequest;
 
 import com.google.inject.Inject;
 
@@ -38,7 +38,7 @@ public class PathValidator implements IPdfRequestValidatable {
 	@Inject Config config;
 	
 	@Override
-	public void validate(PdfRequest request) throws PdfRequestNotValidException {
+	public void validate(InputRequest request) throws PdfRequestNotValidException {
 	
 		
 		if( request.getPath() == null || request.getPath().length() == 0 ){

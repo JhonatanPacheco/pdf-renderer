@@ -9,7 +9,7 @@ import se.billes.pdf.renderer.exception.PdfRequestNotValidException;
 import se.billes.pdf.renderer.model.BaseElement;
 import se.billes.pdf.renderer.model.Page;
 import se.billes.pdf.renderer.request.PdfDocument;
-import se.billes.pdf.renderer.request.PdfRequest;
+import se.billes.pdf.request.incoming.InputRequest;
 
 /**
  * This program is built on top of iText.
@@ -49,7 +49,7 @@ public class PdfRequestValidator {
 	@Inject FontValidator fontValidator;
 	@Inject BaseElementValidator baseElementValidator;
 	
-	public void validateAll(PdfRequest request) throws PdfRequestNotValidException{
+	public void validateAll(InputRequest request) throws PdfRequestNotValidException{
 		
 		if( request == null || request.getDocument() == null ){
 			throw new PdfRequestNotValidException( "Request or document can not be null" );

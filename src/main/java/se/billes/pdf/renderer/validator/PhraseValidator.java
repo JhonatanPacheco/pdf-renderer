@@ -8,9 +8,9 @@ import se.billes.pdf.renderer.model.text.AbstractPhrase;
 import se.billes.pdf.renderer.model.text.Paragraph;
 import se.billes.pdf.renderer.model.text.Phrase;
 import se.billes.pdf.renderer.request.PdfDocument;
-import se.billes.pdf.renderer.request.PdfRequest;
 import se.billes.pdf.renderer.request.factory.ColorFactory;
 import se.billes.pdf.renderer.request.factory.FontFactory;
+import se.billes.pdf.request.incoming.InputRequest;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.pdf.BaseFont;
@@ -69,7 +69,7 @@ public class PhraseValidator {
 		return this;
 	}
 	
-	public void validate( PdfRequest request, Paragraph paragraph ) throws PdfRequestNotValidException{
+	public void validate( InputRequest request, Paragraph paragraph ) throws PdfRequestNotValidException{
 		
 		PdfDocument document = request.getDocument();
 		if( paragraph.getPhrases() == null || paragraph.getPhrases().length == 0 ){

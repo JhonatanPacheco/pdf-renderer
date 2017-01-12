@@ -5,8 +5,8 @@ import com.itextpdf.text.BaseColor;
 import se.billes.pdf.renderer.exception.PdfRequestNotValidException;
 import se.billes.pdf.renderer.model.Line;
 import se.billes.pdf.renderer.request.PdfDocument;
-import se.billes.pdf.renderer.request.PdfRequest;
 import se.billes.pdf.renderer.request.factory.ColorFactory;
+import se.billes.pdf.request.incoming.InputRequest;
 
 /**
  * This program is built on top of iText.
@@ -48,7 +48,7 @@ public class LineValidator {
 		return this;
 	}
 	
-	public void validate(PdfRequest request, Line line) throws PdfRequestNotValidException {
+	public void validate(InputRequest request, Line line) throws PdfRequestNotValidException {
 		
 		PdfDocument document = request.getDocument();
 		DocumentErrorFactory errorFactory = new DocumentErrorFactory().withPageIndex(pageIndex).withBlockIndex(blockIndex);

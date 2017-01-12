@@ -6,7 +6,7 @@ import se.billes.pdf.registry.Config;
 import se.billes.pdf.renderer.exception.PdfRequestNotValidException;
 import se.billes.pdf.renderer.model.Page;
 import se.billes.pdf.renderer.request.PdfDocument;
-import se.billes.pdf.renderer.request.PdfRequest;
+import se.billes.pdf.request.incoming.InputRequest;
 
 import com.google.inject.Inject;
 
@@ -40,7 +40,7 @@ public class PageValidator implements IPdfRequestValidatable {
 	@Inject Config config;
 	
 	@Override
-	public void validate(PdfRequest request) throws PdfRequestNotValidException {
+	public void validate(InputRequest request) throws PdfRequestNotValidException {
 		PdfDocument document = request.getDocument();
 		if( document.getPages() == null || document.getPages().length == 0 ){
 			throw new PdfRequestNotValidException( "Document must contain pages" );

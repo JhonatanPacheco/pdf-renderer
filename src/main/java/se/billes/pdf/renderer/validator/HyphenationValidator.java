@@ -2,8 +2,8 @@ package se.billes.pdf.renderer.validator;
 
 import se.billes.pdf.renderer.exception.PdfRequestNotValidException;
 import se.billes.pdf.renderer.request.PdfDocument;
-import se.billes.pdf.renderer.request.PdfRequest;
 import se.billes.pdf.renderer.request.factory.HyphenationFactory;
+import se.billes.pdf.request.incoming.InputRequest;
 
 /**
  * This program is built on top of iText.
@@ -33,7 +33,7 @@ import se.billes.pdf.renderer.request.factory.HyphenationFactory;
 public class HyphenationValidator implements IPdfRequestValidatable{
 
 	@Override
-	public void validate(PdfRequest request) throws PdfRequestNotValidException {
+	public void validate(InputRequest request) throws PdfRequestNotValidException {
 		PdfDocument document = request.getDocument();
 		if( document.getHyphenation() != null ){
 			document.setHyphenationAuto(new HyphenationFactory().getHypenationAutoByLocale( document.getHyphenation()));

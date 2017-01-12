@@ -7,9 +7,9 @@ import se.billes.pdf.renderer.model.text.AbstractParagraph;
 import se.billes.pdf.renderer.model.text.Paragraph;
 import se.billes.pdf.renderer.model.text.TableParagraph;
 import se.billes.pdf.renderer.request.PdfDocument;
-import se.billes.pdf.renderer.request.PdfRequest;
 import se.billes.pdf.renderer.request.factory.ColorFactory;
 import se.billes.pdf.renderer.request.factory.FontFactory;
+import se.billes.pdf.request.incoming.InputRequest;
 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.pdf.BaseFont;
@@ -56,7 +56,7 @@ public class ParagraphValidator {
 		return this;
 	}
 	
-	public void validateParagraph(PdfRequest request, Paragraph paragraph,DocumentErrorFactory errorFactory ) throws PdfRequestNotValidException{
+	public void validateParagraph(InputRequest request, Paragraph paragraph,DocumentErrorFactory errorFactory ) throws PdfRequestNotValidException{
 		PdfDocument document = request.getDocument();
 		if( paragraph.getLeading() <= 0 ){
 			throw new PdfRequestNotValidException( errorFactory.appendErrorString("Font leading is 0 or less") );
@@ -90,7 +90,7 @@ public class ParagraphValidator {
 	
 	}
 	
-	public void validate( PdfRequest request, Block block ) throws PdfRequestNotValidException{
+	public void validate( InputRequest request, Block block ) throws PdfRequestNotValidException{
 		if( block.getParagraphs() != null ){
 			int count = 0;
 			for( AbstractParagraph abstractParagraph : block.getParagraphs() ){
