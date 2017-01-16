@@ -50,6 +50,7 @@ public class PdfRequestValidator {
 	@Inject BaseElementValidator baseElementValidator;
 	
 	public void validateAll(InputRequest request) throws PdfRequestNotValidException{
+		validatables.clear();
 		
 		if( request == null || request.getDocument() == null ){
 			throw new PdfRequestNotValidException( "Request or document can not be null" );
@@ -78,7 +79,7 @@ public class PdfRequestValidator {
 			}
 		}
 		
-		validatables.clear();
+		
 		
 	}
 }
