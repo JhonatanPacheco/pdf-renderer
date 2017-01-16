@@ -11,7 +11,7 @@ public class FirebasePage {
 	public Template template;
 	
 	class Template{
-		public String path;
+		public String templatePath;
 		public Integer page;
 	}
 	
